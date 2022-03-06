@@ -19,7 +19,7 @@
    Run following command in base directory of this project:
 
     ```
-    docker-compose up --build --d
+    docker-compose up --build -d
     ```
 
    Docker image for this application will be automatically built. Then, all necessary infrastructure (e.g. database) 
