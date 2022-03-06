@@ -1,0 +1,20 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[scripts]
+migrate = "python manage.py migrate"
+test = "python manage.py test"
+lint = "black . --check"
+
+[packages]
+django = "*"
+django-environ = "*"
+psycopg2-binary = "*"
+black = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.9"
