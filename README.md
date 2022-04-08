@@ -22,7 +22,7 @@
     docker-compose up --build -d
     ```
 
-   Docker image for this application will be automatically built. Then, all necessary infrastructure (e.g. database) 
+   Docker image for this application will be automatically built. Then, all necessary infrastructure (e.g. database)
 will be run along with web application.
 
 3. Run database migrations
@@ -35,7 +35,9 @@ will be run along with web application.
 
 ## Usage
 
-Run `docker-compose up` in base directory of this project.
+- Run `docker-compose up` in base directory of this project.
+- Visit `http://localhost:8000` in your browser.
+- To stop the server, use `docker-compose down`
 
 ### Code formatting
 
