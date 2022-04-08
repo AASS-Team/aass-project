@@ -6,7 +6,7 @@ name = "pypi"
 [scripts]
 migrate = "python manage.py migrate"
 test = "python manage.py test"
-lint = "black . --check"
+lint = "black . --check --diff"
 
 [packages]
 django = "*"
