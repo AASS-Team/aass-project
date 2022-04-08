@@ -1,4 +1,3 @@
-from zoneinfo import available_timezones
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 import uuid
@@ -53,7 +52,7 @@ class Analysis(models.Model):
     sample = models.ForeignKey(Sample, on_delete=models.RESTRICT, null=True)
     laborant = models.ForeignKey(User, on_delete=models.RESTRICT, null=True)
     lab = models.ForeignKey(Lab, on_delete=models.RESTRICT, null=True)
-    status = models.CharField(max_length=10, choices=Analysis.Status)
+    status = models.CharField(max_length=12, choices=Status.choices)
     structure = models.CharField(max_length=255, null=True)
     amount = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
