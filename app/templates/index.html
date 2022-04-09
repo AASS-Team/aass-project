@@ -29,6 +29,8 @@
 	<link rel="apple-touch-icon" href="">
 
 	<title>{% block title %}{% endblock %} | {{ settings.APP.NAME }}</title>
+
+	<link href="{% static 'css/app.css' %}" rel="stylesheet">
 </head>
 
 <body>
@@ -37,6 +39,7 @@
 	</div>
 
 	{% block script %}{% endblock %}
+	<script defer src="{% static 'js/app.js' %}"></script>
 </body>
 </html>
 
