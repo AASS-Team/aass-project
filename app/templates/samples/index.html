@@ -44,7 +44,7 @@
 
 			{% get_current_url request as current_url %}
 			{% concat_url current_url '/new' as url_new %}
-			{% component 'ui-button' icon="fas fa-plus" additional_classes="rounded-full" text="Pridať vzorku" type="link" href=url_new primary=True %}
+			{% component 'ui-button' icon="fas fa-plus" additional_classes="rounded-full" text="Pridať vzorku" type="link" href='new' primary=True %}
 		</div>
 	</div>
 

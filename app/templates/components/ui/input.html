@@ -1,0 +1,28 @@
+<div
+    class="px-3 pb-1 bg-gray-300 rounded
+
+	{% if w_full is not None %}
+	w-full
+	{% endif %}
+
+	{% if labeled is not None %}
+	pt-8
+	{% endif %}
+
+	{% if key in errors %}
+    border-2 border-red-500
+    {% endif %}
+
+	{% if additional_classes is not None %}
+	{{ additional_classes }}
+	{% endif %}
+	"
+>
+    <input
+        type="{{ type }}"
+        id="{{ name }}"
+		name="{{ name }}"
+        class="bg-gray-300 pt-2 pb-1 text-gray-700 outline-none placeholder-gray-500 self-center align-middle w-full"
+         {{ attributes | safe }}
+    />
+</div>

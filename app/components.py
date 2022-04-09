@@ -2,7 +2,7 @@ from django_components import component
 
 
 def dict2attribute(dict):
-    return "".join([f'{key}="{value}"' for key, value in dict.items()])
+    return "".join([f' {key}="{value}"' for key, value in dict.items()])
 
 
 @component.register("user-circle")
@@ -46,7 +46,6 @@ class UiSearch(component.Component):
     def get_context_data(self, additional_classes, **kwargs):
         return {
             "additional_classes": additional_classes,
-            "bruh": kwargs,
             "attributes": dict2attribute(kwargs),
         }
 
@@ -60,9 +59,9 @@ class UiButton(component.Component):
         self,
         text,
         additional_classes,
-        icon,
         type,
-        href,
+        icon=None,
+        href=None,
         disabled=None,
         primary=None,
         secondary=None,
@@ -114,4 +113,53 @@ class UiTable(component.Component):
     ):
         return {
             "options": options,
+        }
+
+
+@component.register("ui-label")
+class UiLabel(component.Component):
+    def get_template_name(self, context):
+        return "components/ui/label.html"
+
+    def get_context_data(
+        self, key, label_for, additional_classes=None, center=None, **kwargs
+    ):
+        return {
+            "key": key,
+            "label_for": label_for,
+            "center": center,
+            "additional_classes": additional_classes,
+            "attributes": dict2attribute(kwargs),
+        }
+
+
+@component.register("ui-input")
+class UiInput(component.Component):
+    def get_template_name(self, context):
+        return "components/ui/input.html"
+
+    def get_context_data(
+        self, name, type, w_full=None, labeled=None, additional_classes=None, **kwargs
+    ):
+        return {
+            "name": name,
+            "type": type,
+            "w_full": w_full,
+            "labeled": labeled,
+            "additional_classes": additional_classes,
+            "attributes": dict2attribute(kwargs),
+        }
+
+
+@component.register("ui-select")
+class UiSelect(component.Component):
+    def get_template_name(self, context):
+        return "components/ui/select.html"
+
+    def get_context_data(self, name, items, additional_classes=None, **kwargs):
+        return {
+            "name": name,
+            "items": items,
+            "additional_classes": additional_classes,
+            "attributes": dict2attribute(kwargs),
         }

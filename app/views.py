@@ -1,9 +1,11 @@
+from django.shortcuts import redirect
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.renderers import TemplateHTMLRenderer
 
 from . import serializers
-from .models import Sample
+from .models import Sample, User, Grant
 
 
 class SampleList(APIView):
@@ -43,6 +45,36 @@ class SampleList(APIView):
         }
 
         return Response(
-            {"samples": serializer.data, "options": options},
+            data={"samples": serializer.data, "options": options},
             template_name="samples/index.html",
+        )
+
+    def post(self, request, format=None):
+        serializer = self.serializer_class(data=request.data)
+
+        if not serializer.is_valid():
+            return Response(
+                data={
+                    "errors": serializer.errors,
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+                template_name="samples/create.html",
+            )
+        else:
+            return redirect("sample-list")
+
+
+class SampleCreate(APIView):
+    """
+    Create new sample
+    """
+
+    renderer_classes = [TemplateHTMLRenderer]
+
+    def get(self, request, format=None):
+        users = serializers.UserSerializer(User.objects.all(), many=True)
+        grants = serializers.GrantSerializer(Grant.objects.all(), many=True)
+
+        return Response(
+            data={"users": users.data, "grants": grants.data}, template_name="samples/create.html"
         )

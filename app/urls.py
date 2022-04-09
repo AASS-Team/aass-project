@@ -9,7 +9,8 @@ urlpatterns = [
         "samples/",
         include(
             [
-                path("", views.SampleList.as_view()),
+                path("", views.SampleList.as_view(), name="sample-list"),
+                path("new", views.SampleCreate.as_view()),
             ]
         ),
     ),
