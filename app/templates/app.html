@@ -1,0 +1,20 @@
+{% extends "index.html" %}
+
+{% block app %}
+	<div class="h-screen bg-white flex">
+		{#	TODO (fgic): Alert #}
+		{# <x-alert></x-alert>#}
+		{% include '_partials/navigation.html' %}
+		<div
+				class="flex flex-col flex-1 h-screen max-h-full overflow-y-auto"
+		>
+			{% include '_partials/header.html' %}
+			<div
+					class="flex flex-col flex-1 bg-gray-300 p-8 overflow-y-auto"
+					style="max-height: calc(100vh - 65px);"
+			>
+				{% block content %}{% endblock %}
+			</div>
+		</div>
+	</div>
+{% endblock %}
