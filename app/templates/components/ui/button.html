@@ -1,0 +1,57 @@
+{% if type != 'link' %}
+    <div class="{{ class_object }}">
+        {% if icon is not None %}
+            <i
+				class="
+				{% if text is not None %}
+					mr-2
+				{% endif %}
+				{{ icon }}
+				"
+			></i>
+        {% endif %}
+
+		{% if type == 'submit' %}
+            <input
+                type="{{type}}"
+                value="{{text}}"
+                class="focus:outline-none bg-transparent hover:cursor-pointer"
+                style="text-align: center;"
+                {{ attributes | safe }}
+            />
+        {% else %}
+            <button
+                class="focus:outline-none"
+                style="text-align: center;"
+                {{ attributes | safe }}
+            >
+				{{ text }}
+            </button>
+        {% endif %}
+    </div>
+{% else %}
+    <a
+		{% if disabled is None %}
+        	href="{{ href }}"
+		{% endif %}
+        class="{{class_object}}"
+        style="text-align: center;"
+        {{ attributes | safe }}
+	>
+
+		{% if icon is not None %}
+		<i
+			class="
+			{% if text is not None %}
+				mr-2
+			{% endif %}
+			{{ icon }}
+			"
+		></i>
+		{% endif %}
+
+		{% if text is not None %}
+            {{ text }}
+        {% endif %}
+    </a>
+{% endif %}

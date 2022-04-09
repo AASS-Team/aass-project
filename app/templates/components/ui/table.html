@@ -1,0 +1,58 @@
+{% load component_tags %}
+{% load get_table_row_class %}
+{% load get_current_url %}
+{% load concat_url %}
+
+{% get_current_url request as current_url %}
+
+<table
+    class="w-full shadow-sm"
+    style="text-align: center;"
+>
+	{# Header #}
+    <thead class="block overflow-y-auto w-full">
+		<tr
+			class="table w-full"
+			style="table-layout: fixed;"
+		>
+			{% for item in options.header.items %}
+				<th class="py-1 pb-4 uppercase text-xs text-gray-500 hover:cursor-pointer relative {% get_table_row_class options forloop.counter0 False %}"				>
+					{{ item.name }}
+				</th>
+			{% endfor %}
+    	</tr>
+    </thead>
+    <tbody
+        class="block overflow-y-auto w-full border-t border-gray-200"
+        style="max-height: calc(100vh - (32px * 2) - 72px - 65px - 38px);"
+    >
+		{# Table rows , scoped slots #}
+		{% for item in options.data.items %}
+			<tr
+				class="hover:cursor-pointer hover:bg-gray-100 table w-full relative"
+				style="table-layout: fixed;"
+				{% if options.data.onclick is not None %}
+				onclick="window.location = '{% concat_url current_url item.id %}'"
+				{% endif %}
+			>
+				{% slot "table_item" %}{% endslot %}
+			</tr>
+		{% empty %}
+			{# Empty message #}
+			<tr
+				class="table w-full"
+				style="table-layout: fixed;"
+			>
+				<td
+					class="py-3 border-b border-gray-200"
+					colspan="{{ options.header.items.count }}"
+				>
+					<p class="text-gray-600 px-6 text-left">
+						{{ options.data.empty }}
+					</p>
+				</td>
+			</tr>
+		{% endfor %}
+    </tbody>
+</table>
+<div class="flex flex-row p-2 items-center pl-5"></div>
