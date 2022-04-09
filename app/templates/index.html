@@ -1,0 +1,43 @@
+{% load static %}
+{% load component_tags %}
+
+<!doctype html>
+<html lang="sk">
+<head>
+	<meta charset="utf-8">
+	<meta name="referrer" content="no-referrer">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<meta name="author" content="{{ settings.APP.AUTHOR }}">
+	<meta name="description" content="{{ settings.APP.DESCRIPTION }}">
+
+	<!-- Facebook Meta Tags -->
+	<meta property="og:type" content="website"/>
+	<meta property="og:title" content="{{ settings.APP.NAME }}"/>
+	<meta property="og:description" content="{{ settings.APP.DESCRIPTION }}"/>
+	<meta property="og:url" content="{{ request.schema }}://{{ request.META.HTTP_HOST }}"/>
+	{#	<meta property="og:image" content=""/>#}
+
+	<!-- Twitter Meta Tags -->
+	<meta name="twitter:card" content="summary_large_image"/>
+	<meta name="twitter:title" content="{{ settings.APP.NAME }}"/>
+	<meta name="twitter:description" content="{{ settings.APP.DESCRIPTION }}"/>
+	<meta property="twitter:url" content="{{ request.schema }}://{{ request.META.HTTP_HOST }}"/>
+	{#	<meta name="twitter:image" content=""/>#}
+
+	<link rel="icon" type="image/png" href="">
+	<link rel="apple-touch-icon" href="">
+
+	<title>{% block title %}{% endblock %} | {{ settings.APP.NAME }}</title>
+</head>
+
+<body>
+	<div id="app" class="h-screen">
+		{% block app %}{% endblock %}
+	</div>
+
+	{% block script %}{% endblock %}
+</body>
+</html>
+
+

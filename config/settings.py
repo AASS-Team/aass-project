@@ -127,3 +127,9 @@ USE_TZ = True
 STATIC_URL = "/static/"
 
 AUTH_USER_MODEL = "app.User"
+
+APP = {
+    "AUTHOR": require_env("APP_NAME"),
+    "DESCRIPTION": require_env("APP_DESC"),
+    "NAME": require_env("APP_NAME"),
+}
