@@ -13,6 +13,7 @@ django = "*"
 django-environ = "*"
 psycopg2-binary = "*"
 black = "*"
+django-components = "*"
 
 [dev-packages]
 
