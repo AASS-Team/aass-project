@@ -33,6 +33,12 @@ will be run along with web application.
     docker-compose exec web pipenv run migrate
     ```
 
+4. Optional: Seeding the database with fake data
+
+    ```
+	docker-compose exec web pipenv run seed
+    ```
+
 ## Usage
 
 - Run `docker-compose up` in base directory of this project.

@@ -5,6 +5,7 @@ name = "pypi"
 
 [scripts]
 migrate = "python manage.py migrate"
+seed = "python manage.py seed app --number=10"
 test = "python manage.py test"
 lint = "black . --check --diff"
 
@@ -15,6 +16,7 @@ psycopg2-binary = "*"
 black = "*"
 djangorestframework = "*"
 django-components = "*"
+django-seed = "*"
 
 [dev-packages]
 
