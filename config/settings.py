@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     "app",
     "labs",
     "tools",
+    "analyses",
 ]
 
 MIDDLEWARE = [
@@ -78,7 +79,7 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],
+        "DIRS": [BASE_DIR / "templates", BASE_DIR / "analyses" / "templates"],
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.debug",

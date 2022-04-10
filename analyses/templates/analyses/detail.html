@@ -1,0 +1,102 @@
+{% extends 'app.html' %}
+
+{% load component_tags %}
+{% load method_override %}
+
+{% block title %}{{ sample.name }}{% endblock %}
+
+{% block content %}
+	<div class="bg-white rounded-lg">
+		<div class="p-4 pl-6">
+			<h1 class="text-2xl mb-10">
+				{{ sample.name }}
+			</h1>
+
+			{# vzorka #}
+			{% component_block 'ui-label' key="vzorka" center=True %}
+				{% slot content %}
+					{# TODO #}
+					{# @can('admin') #}
+					{# <a #}
+					{#	class="text-blue-600 hover:underline"#}
+					{#	href="{{ url('/users',$sample->user->id) }}"#}
+					{#	>#}
+					{#	{{ $sample->user->login }}#}
+					{#	</a>#}
+					<p>
+						{{ analysis.sample.name|truncatewords:10 }}
+					</p>
+				{% endslot %}
+			{% endcomponent_block %}
+
+			{# laborant #}
+			{% component_block 'ui-label' key="laborant" center=True %}
+				{% slot content %}
+					{# TODO #}
+					{# @can('admin') #}
+					{# <a #}
+					{#	class="text-blue-600 hover:underline"#}
+					{#	href="{{ url('/users',$sample->user->id) }}"#}
+					{#	>#}
+					{#	{{ $sample->user->login }}#}
+					{#	</a>#}
+					<p>
+						{{ analysis.laborant.name }}
+					</p>
+				{% endslot %}
+			{% endcomponent_block %}
+
+			{# lab #}
+			{% component_block 'ui-label' key="laboratórium" center=True %}
+				{% slot content %}
+					{# TODO #}
+					{# @can('admin') #}
+					{# <a #}
+					{#	class="text-blue-600 hover:underline"#}
+					{#	href="{{ url('/users',$sample->user->id) }}"#}
+					{#	>#}
+					{#	{{ $sample->user->login }}#}
+					{#	</a>#}
+					<p>
+						{{ analysis.lab.name }}
+					</p>
+				{% endslot %}
+			{% endcomponent_block %}
+
+			{# naradie #}
+			{% component_block 'ui-label' key="náradie" center=True %}
+				{% slot content %}
+					{# TODO #}
+					{# @can('admin') #}
+					{# <a #}
+					{#	class="text-blue-600 hover:underline"#}
+					{#	href="{{ url('/users',$sample->user->id) }}"#}
+					{#	>#}
+					{#	{{ $sample->user->login }}#}
+					{#	</a>#}
+					<p>
+						{{ analysis.tools.0.name }}
+					</p>
+				{% endslot %}
+			{% endcomponent_block %}
+
+			{#	TODO struktura #}
+
+			{# TODO #}
+			{# @can('laborant')#}
+			<div class="flex flex-row justify-end mt-5">
+
+				{% url 'analysis-edit' analysis.id as analysis_edit_url %}
+				{% component 'ui-button' additional_classes="rounded-full ml-3" text="Upraviť analýzu" primary=True type="link" href=analysis_edit_url %}
+
+				{# TODO #}
+				{# @can('admin')#}
+				<form action="{% url 'analysis-detail' analysis.id %}" method="POST">
+					{% csrf_token %}
+					{% method_override 'DELETE' %}
+					{% component 'ui-button' additional_classes="rounded-full ml-3" text="Vymazať analýzu" danger=True type="submit" %}
+				</form>
+			</div>
+		</div>
+	</div>
+{% endblock %}

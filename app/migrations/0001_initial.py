@@ -185,61 +185,6 @@ class Migration(migrations.Migration):
                 ),
             ],
         ),
-        migrations.CreateModel(
-            name="Analysis",
-            fields=[
-                (
-                    "id",
-                    models.UUIDField(
-                        default=uuid.uuid4,
-                        editable=False,
-                        primary_key=True,
-                        serialize=False,
-                    ),
-                ),
-                (
-                    "status",
-                    models.CharField(
-                        choices=[
-                            ("Finished", "Finished"),
-                            ("Pending", "Pending"),
-                            ("In progress", "In Progress"),
-                        ],
-                        max_length=12,
-                    ),
-                ),
-                ("structure", models.CharField(max_length=255, null=True)),
-                ("amount", models.FloatField()),
-                ("created_at", models.DateTimeField(auto_now_add=True)),
-                ("started_at", models.DateTimeField()),
-                ("ended_at", models.DateTimeField()),
-                (
-                    "lab",
-                    models.ForeignKey(
-                        null=True,
-                        on_delete=django.db.models.deletion.RESTRICT,
-                        to="labs.lab",
-                    ),
-                ),
-                (
-                    "laborant",
-                    models.ForeignKey(
-                        null=True,
-                        on_delete=django.db.models.deletion.RESTRICT,
-                        to=settings.AUTH_USER_MODEL,
-                    ),
-                ),
-                (
-                    "sample",
-                    models.ForeignKey(
-                        null=True,
-                        on_delete=django.db.models.deletion.RESTRICT,
-                        to="app.sample",
-                    ),
-                ),
-                ("tools", models.ManyToManyField(to="tools.tool")),
-            ],
-        ),
         migrations.AddField(
             model_name="user",
             name="role",

@@ -19,6 +19,4 @@ handler404 = "config.views.page_not_found_view"
 handler500 = "config.views.server_error_view"
 handler403 = "config.views.permission_denied_view"
 
-urlpatterns = [
-    path("", include("app.urls")),
-]
+urlpatterns = [path("", include("app.urls")), path("", include("analyses.urls"))]
