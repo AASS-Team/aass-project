@@ -1,8 +1,6 @@
 {% extends 'app.html' %}
 
 {% load component_tags %}
-{% load concat_url %}
-{% load get_current_url %}
 {% load get_table_row_class %}
 
 {% block title %}Vzorky{% endblock %}
@@ -42,8 +40,7 @@
 				{% component 'ui-search' additional_classes="shadow-sm border mr-3" value=request.GET.search extendable="True" %}
 			</form>
 
-			{% get_current_url request as current_url %}
-			{% concat_url current_url '/new' as url_new %}
+			{% url 'sample-new' as url_new %}
 			{% component 'ui-button' icon="fas fa-plus" additional_classes="rounded-full" text="Pridať vzorku" type="link" href='new' primary=True %}
 		</div>
 	</div>

@@ -1,13 +1,9 @@
 {% extends 'app.html' %}
 
 {% load component_tags %}
-{% load concat_url %}
-{% load get_current_url %}
 {% load obj_get %}
 
 {% block title %}Nová vzorka{% endblock %}
-
-{# TODO(fgic): Old values #}
 
 {% block content %}
 
@@ -27,7 +23,7 @@
 			>
 
 			{# používateľ #}
-			{% component_block 'ui-label' key="user" label_for="user" additional_classes="mt-10" center=True %}
+			{% component_block 'ui-label' key="používateľ" label_for="user" additional_classes="mt-10" center=True %}
 				{% slot content %}
 					{% component 'ui-select' name="user" items=users additional_classes="text-gray-700 w-1/4" required=True errors=errors%}
 				{% endslot %}

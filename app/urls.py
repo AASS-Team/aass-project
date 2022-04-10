@@ -10,7 +10,8 @@ urlpatterns = [
         include(
             [
                 path("", views.SampleList.as_view(), name="sample-list"),
-                path("new", views.SampleCreate.as_view()),
+                path("new", views.SampleCreate.as_view(), name="sample-new"),
+                path("<uuid:id>", views.SampleDetail.as_view(), name="sample-detail"),
             ]
         ),
     ),

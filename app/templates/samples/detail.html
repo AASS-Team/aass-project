@@ -1,0 +1,97 @@
+{% extends 'app.html' %}
+
+{% load component_tags %}
+{% load method_override %}
+
+{% block title %}{{ sample.name }}{% endblock %}
+
+{% block content %}
+	<div class="bg-white rounded-lg">
+		<div class="p-4 pl-6">
+			<h1 class="text-2xl mb-10">
+				{{ sample.name }}
+			</h1>
+
+			{# TODO #}
+			{#	@if($sample->user->id != Auth::id())#}
+			{% component_block 'ui-label' key="používateľ" center=True %}
+				{% slot content %}
+				{# TODO #}
+				{# @can('admin') #}
+				{# <a #}
+				{#	class="text-blue-600 hover:underline"#}
+				{#	href="{{ url('/users',$sample->user->id) }}"#}
+				{# >#}
+				{# {{ $sample->user->login }}#}
+				{#	</a>#}
+				<p>
+					{{ sample.user.name }}
+				</p>
+				{% endslot %}
+			{% endcomponent_block %}
+
+			{# grant #}
+			{% component_block 'ui-label' key="grant" center=True %}
+				{% slot content %}
+					{# TODO #}
+					{# @can('admin') #}
+					{# <a #}
+					{#	class="text-blue-600 hover:underline"#}
+					{#	href="{{ url('/users',$sample->user->id) }}"#}
+					{#	>#}
+					{#	{{ $sample->user->login }}#}
+					{#	</a>#}
+					<p>
+						{{ sample.grant.name|truncatewords:10 }}
+					</p>
+				{% endslot %}
+			{% endcomponent_block %}
+
+			{# mnozstvo #}
+			{% component_block 'ui-label' key="množstvo" center=True %}
+				{% slot content %}
+					<p>
+						{{ sample.amount }}
+					</p>
+					<span class="ml-3 text-gray-500">ml</span>
+				{% endslot %}
+			{% endcomponent_block %}
+
+			{# poznamka #}
+			{% component_block 'ui-label' key="poznámka" %}
+				{% slot content %}
+					<p>
+						{{ sample.note }}
+					</p>
+				{% endslot %}
+			{% endcomponent_block %}
+
+			{# TODO #}
+			{# analyza #}
+			{# {% component_block 'ui-label' key="analyza" %}#}
+			{#	{% slot content %}#}
+			{#	{% endslot %}#}
+			{#	{% endcomponent_block %}#}
+
+			{# TODO #}
+			{# @can('laborant')#}
+			<div class="flex flex-row justify-end mt-5">
+				{% url 'analysis-new' as new_analysis_url  %}
+				{% with url_new=new_analysis_url|add:'?sample='|add:sample.id %}
+				{% component 'ui-button' additional_classes="rounded-full" text="Analyzovať" type="link" primary=True href=url_new %}
+				{% endwith %}
+
+				{% url 'sample-edit' as sample_edit_url %}
+				{% component 'ui-button' additional_classes="rounded-full ml-3" text="Upraviť vzorku" primary=True type="link" href=sample_edit_url %}
+
+				{# TODO #}
+				{# @can('admin')#}
+				<form action="{% url 'sample-detail' sample.id %}" method="POST">
+					{% csrf_token %}
+					{% method_override 'DELETE' %}
+					{% component 'ui-button' additional_classes="rounded-full ml-3" text="Vymazať vzorku" danger=True type="submit" %}
+				</form>
+			</div>
+		</div>
+	</div>
+{% endblock %}

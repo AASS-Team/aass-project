@@ -1,9 +1,5 @@
 {% load component_tags %}
 {% load get_table_row_class %}
-{% load get_current_url %}
-{% load concat_url %}
-
-{% get_current_url request as current_url %}
 
 <table
     class="w-full shadow-sm"
@@ -32,7 +28,7 @@
 				class="hover:cursor-pointer hover:bg-gray-100 table w-full relative"
 				style="table-layout: fixed;"
 				{% if options.data.onclick is not None %}
-				onclick="window.location = '{% concat_url current_url item.id %}'"
+				onclick="window.location = '{% url 'sample-detail' item.id %}'"
 				{% endif %}
 			>
 				{% slot "table_item" %}{% endslot %}

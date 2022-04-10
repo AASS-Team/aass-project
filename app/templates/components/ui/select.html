@@ -1,7 +1,7 @@
 {% load obj_get %}
 
 <div class="bg-gray-300 rounded flex flex-row items-center relative {{ additional_classes }}
-	{% if key in errors %}
+	{% if name in errors %}
   	border-2 border-red-400 @endif
 	{% endif %}
 ">
@@ -9,13 +9,18 @@
         class="bg-gray-300 focus:outline-none block w-full p-2 hover:cursor-pointer"
         style="-moz-appearance: none;-webkit-appearance: none;appearance: none;"
         name="{{ name }}"
+		{% if required %}
+		required
+		{% endif %}
         {{ attributes | safe }}
     >
 		{% obj_get request.POST name as old_value %}"
 		<option
 			value=""
+			{% if required %}
 			hidden
 			disabled
+			{% endif %}
 			{% if not old_value %}
 			selected
 			{% endif %}
@@ -34,9 +39,9 @@
        style="right:.3em;pointer-events: none;"
     ></i>
 </div>
-{% if key in errors %}
+{% if name in errors %}
 	<span class="ml-5 text-red-400 text-sm">
-		{% obj_get errors key as error %}
+		{% obj_get errors name as error %}
 		{{ error|first}}
 	</span>
 {% endif %}

@@ -59,7 +59,7 @@ class UiButton(component.Component):
         self,
         text,
         additional_classes,
-        type,
+        type=None,
         icon=None,
         href=None,
         disabled=None,
@@ -122,7 +122,7 @@ class UiLabel(component.Component):
         return "components/ui/label.html"
 
     def get_context_data(
-        self, key, label_for, additional_classes=None, center=None, **kwargs
+        self, key=None, label_for=None, additional_classes=None, center=None, **kwargs
     ):
         return {
             "key": key,
@@ -156,10 +156,13 @@ class UiSelect(component.Component):
     def get_template_name(self, context):
         return "components/ui/select.html"
 
-    def get_context_data(self, name, items, additional_classes=None, **kwargs):
+    def get_context_data(
+        self, name, items, required=None, additional_classes=None, **kwargs
+    ):
         return {
             "name": name,
             "items": items,
+            "required": required,
             "additional_classes": additional_classes,
             "attributes": dict2attribute(kwargs),
         }

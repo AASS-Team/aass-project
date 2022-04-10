@@ -53,15 +53,20 @@ class SampleList(APIView):
         serializer = self.serializer_class(data=request.data)
 
         if not serializer.is_valid():
+            users = serializers.UserSerializer(User.objects.all(), many=True)
+            grants = serializers.GrantSerializer(Grant.objects.all(), many=True)
             return Response(
                 data={
+                    "users": users.data,
+                    "grants": grants.data,
                     "errors": serializer.errors,
                 },
                 status=status.HTTP_400_BAD_REQUEST,
                 template_name="samples/create.html",
             )
-        else:
-            return redirect("sample-list")
+
+        serializer.save()
+        return redirect("sample-list")
 
 
 class SampleCreate(APIView):
@@ -76,5 +81,36 @@ class SampleCreate(APIView):
         grants = serializers.GrantSerializer(Grant.objects.all(), many=True)
 
         return Response(
-            data={"users": users.data, "grants": grants.data}, template_name="samples/create.html"
+            data={"users": users.data, "grants": grants.data},
+            template_name="samples/create.html",
         )
+
+
+class SampleDetail(APIView):
+    """
+    Create new sample
+    """
+
+    renderer_classes = [TemplateHTMLRenderer]
+
+    def get_object(self, id):
+        try:
+            return Sample.objects.get(pk=id)
+        except Sample.DoesNotExist:
+            return redirect("404")
+
+    def get(self, request, id, format=None):
+        sample = self.get_object(id)
+        serializer = serializers.SampleSerializer(sample)
+        return Response(
+            data={"sample": serializer.data}, template_name="samples/detail.html"
+        )
+
+    def delete(self, request, id, format=None):
+        sample = self.get_object(id)
+        deleted_rows = sample.delete()
+
+        if len(deleted_rows) <= 0:
+            return redirect("sample-detail", id)
+
+        return redirect("sample-list")

@@ -17,6 +17,7 @@ black = "*"
 djangorestframework = "*"
 django-components = "*"
 django-seed = "*"
+django-method-override = "*"
 
 [dev-packages]
 
