@@ -157,12 +157,25 @@ class UiSelect(component.Component):
         return "components/ui/select.html"
 
     def get_context_data(
-        self, name, items, required=None, additional_classes=None, **kwargs
+        self,
+        name,
+        items,
+        required=None,
+        selected=None,
+        additional_classes=None,
+        **kwargs,
     ):
         return {
             "name": name,
             "items": items,
             "required": required,
+            "selected": selected,
             "additional_classes": additional_classes,
             "attributes": dict2attribute(kwargs),
         }
+
+
+@component.register("alert")
+class Alert(component.Component):
+    def get_template_name(self, context):
+        return "components/alert/alert.html"
