@@ -1,4 +1,5 @@
 from django.shortcuts import redirect
+from django.contrib import messages
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -27,7 +28,6 @@ class SampleList(APIView):
             },
             "header": {
                 "items": [
-                    {"name": "id"},
                     {"name": "názov", "key": "name"},
                     {"name": "používateľ", "key": "login"},
                     {
@@ -37,9 +37,6 @@ class SampleList(APIView):
                 ]
             },
             "layout": [
-                {
-                    "width": 16,
-                },
                 {"width": 96, "width-sm": 64, "left": True},
             ],
         }
@@ -55,6 +52,8 @@ class SampleList(APIView):
         if not serializer.is_valid():
             users = serializers.UserSerializer(User.objects.all(), many=True)
             grants = serializers.GrantSerializer(Grant.objects.all(), many=True)
+
+            messages.add_message(request, messages.ERROR, "Nepodarilo sa uložiť vzorku")
             return Response(
                 data={
                     "users": users.data,
@@ -65,6 +64,7 @@ class SampleList(APIView):
                 template_name="samples/create.html",
             )
 
+        messages.add_message(request, messages.SUCCESS, "Vzorka uložená")
         serializer.save()
         return redirect("sample-list")
 
@@ -88,7 +88,7 @@ class SampleCreate(APIView):
 
 class SampleDetail(APIView):
     """
-    Create new sample
+    Sample detail
     """
 
     renderer_classes = [TemplateHTMLRenderer]
@@ -106,11 +106,66 @@ class SampleDetail(APIView):
             data={"sample": serializer.data}, template_name="samples/detail.html"
         )
 
+    def put(self, request, id, format=None):
+        sample = self.get_object(id)
+        serializer = serializers.SampleSerializer(sample, data=request.data)
+
+        if not serializer.is_valid():
+            users = serializers.UserSerializer(User.objects.all(), many=True)
+            grants = serializers.GrantSerializer(Grant.objects.all(), many=True)
+
+            messages.add_message(request, messages.ERROR, "Nepodarilo sa uložiť vzorku")
+            return Response(
+                data={
+                    "sample": serializer.data,
+                    "users": users.data,
+                    "grants": grants.data,
+                },
+                template_name="samples/edit.html",
+            )
+
+        serializer.save()
+        messages.add_message(request, messages.SUCCESS, "Vzorka uložená")
+        return Response(
+            data={"sample": serializer.data}, template_name="samples/detail.html"
+        )
+
     def delete(self, request, id, format=None):
         sample = self.get_object(id)
         deleted_rows = sample.delete()
 
         if len(deleted_rows) <= 0:
+            messages.add_message(request, messages.ERROR, "Chyba!")
             return redirect("sample-detail", id)
 
+        messages.add_message(request, messages.SUCCESS, "Vzorka vymazaná")
         return redirect("sample-list")
+
+
+class SampleEdit(APIView):
+    """
+    Sample edit
+    """
+
+    renderer_classes = [TemplateHTMLRenderer]
+
+    def get_object(self, id):
+        try:
+            return Sample.objects.get(pk=id)
+        except Sample.DoesNotExist:
+            return redirect("404")
+
+    def get(self, request, id, format=None):
+        sample = self.get_object(id)
+        serializer = serializers.SampleSerializer(sample)
+        users = serializers.UserSerializer(User.objects.all(), many=True)
+        grants = serializers.GrantSerializer(Grant.objects.all(), many=True)
+
+        return Response(
+            data={
+                "sample": serializer.data,
+                "users": users.data,
+                "grants": grants.data,
+            },
+            template_name="samples/edit.html",
+        )

@@ -9,7 +9,7 @@
 
 <div class="bg-white rounded-lg">
 	<div class="p-4 pl-6">
-		<form action="/samples/" method="POST">
+		<form action="{% url 'sample-list' %}" method="POST">
 			{% csrf_token %}
 
 			<input

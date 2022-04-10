@@ -47,19 +47,13 @@
 
 	{% component_block 'ui-table' options=options %}
 		{% slot table_item %}
-			<td class="text-gray-600 {% get_table_row_class options 0 %}">
-				<p>{{ item.id }}</p>
+			<td class="{% get_table_row_class options 0 %}">
+				{{  item.name|truncatewords:10 }}
 			</td>
 			<td class="{% get_table_row_class options 1 %}">
-				{{  item.name }}
-				{#			{{  (strlen($item->name) < 32 ) ? $item->name  : substr($item->name,0,29).'...'  }}#}
+				{{  item.user.name }}
 			</td>
 			<td class="{% get_table_row_class options 2 %}">
-			>
-{#				{{  $item->user->login }}#}
-				user
-			</td>
-			<td class="{% get_table_row_class options 3 %}">
 				{{  item.created_at }}
 			</td>
 		{% endslot %}

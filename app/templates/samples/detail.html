@@ -81,7 +81,7 @@
 				{% component 'ui-button' additional_classes="rounded-full" text="Analyzovať" type="link" primary=True href=url_new %}
 				{% endwith %}
 
-				{% url 'sample-edit' as sample_edit_url %}
+				{% url 'sample-edit' sample.id as sample_edit_url %}
 				{% component 'ui-button' additional_classes="rounded-full ml-3" text="Upraviť vzorku" primary=True type="link" href=sample_edit_url %}
 
 				{# TODO #}

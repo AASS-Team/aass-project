@@ -1,9 +1,10 @@
 {% extends "index.html" %}
 
+{% load component_tags %}
+
 {% block app %}
 	<div class="h-screen bg-white flex">
-		{#	TODO (fgic): Alert #}
-		{# <x-alert></x-alert>#}
+		{% component 'alert' %}
 		{% include '_partials/navigation.html' %}
 		<div
 				class="flex flex-col flex-1 h-screen max-h-full overflow-y-auto"
