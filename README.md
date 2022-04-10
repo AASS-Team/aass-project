@@ -11,29 +11,27 @@
 1. Set your environment variables by creating your own `.env` file in root similar to `.env.example`.
 
     - Specify `DJANGO_SECRET_KEY`. It can be generated as `base64 /dev/urandom | head -c50`.
-
-   All Other configuration in `.env.example` is ready for local development.
+    - All Other configuration in `.env.example` is ready for local development.
 
 2. Build and run docker containers
 
-   Run following command in base directory of this project:
+    - Run following command in base directory of this project:
 
-    ```
-    docker-compose up --build -d
-    ```
+	```
+	docker-compose up --build -d
+	```
 
-   Docker image for this application will be automatically built. Then, all necessary infrastructure (e.g. database)
+    - Docker image for this application will be automatically built. Then, all necessary infrastructure (e.g. database)
 will be run along with web application.
 
 3. Run database migrations
 
-   Create all necessary tables in database by executing:
-
+    - Create all necessary tables in database by executing:
     ```
     docker-compose exec web pipenv run migrate
     ```
 
-## Usage
+## Development
 
 1. Run `docker-compose up` in base directory of this project.
 
