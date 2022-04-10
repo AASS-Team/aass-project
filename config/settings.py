@@ -149,3 +149,6 @@ APP = {
     "DESCRIPTION": require_env("APP_DESC"),
     "NAME": require_env("APP_NAME"),
 }
+
+
+FIXTURE_DIRS = [BASE_DIR / "fixtures"]

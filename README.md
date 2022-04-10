@@ -33,17 +33,51 @@ will be run along with web application.
     docker-compose exec web pipenv run migrate
     ```
 
-4. Optional: Seeding the database with fake data
-
-    ```
-	docker-compose exec web pipenv run seed
-    ```
-
 ## Usage
 
-- Run `docker-compose up` in base directory of this project.
-- Visit `http://localhost:8000` in your browser.
-- To stop the server, use `docker-compose down`
+1. Run `docker-compose up` in base directory of this project.
+
+2. Visit [http://localhost:8000](http://localhost:8000) in your browser.
+
+3. To stop the server, use `docker-compose down`
+
+
+### Seeding the database with data
+
+For fake data you have two options:
+
+#### a) Fixtures
+
+We created a fake real world data. The fixtures are present in `/fixtures` directory.
+
+```
+docker-compose exec web pipenv run loaddata
+```
+
+#### b) Random data
+
+We use `django-seed` to generate fake data.
+To run the seeder run following command:
+
+
+```
+docker-compose exec web pipenv run seed
+```
+
+### Database cleanup
+
+If you wish to delete all data, but keep the tables, run:
+
+```
+docker-compose exec web pipenv run flush
+```
+
+If something went wrong with migrations, you can remove all migrations using following command:
+
+```
+docker-compose exec web pipenv run migrate zero
+```
+
 
 ### Code formatting
 

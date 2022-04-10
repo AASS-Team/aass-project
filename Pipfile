@@ -6,6 +6,8 @@ name = "pypi"
 [scripts]
 migrate = "python manage.py migrate"
 seed = "python manage.py seed app --number=10"
+loaddata = "python manage.py loaddata app.json -v 3"
+flush = "python manage.py flush --noinput"
 test = "python manage.py test"
 lint = "black . --check --diff"
 
