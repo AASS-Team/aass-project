@@ -1,0 +1,29 @@
+{% extends "index.html" %}
+
+{% load static %}
+{% load component_tags %}
+
+{% block title %}Chyba{% endblock %}
+
+{% block app %}
+<div class="h-full flex-col bg-gray-200">
+	<div class="flex w-full shadow-lg bg-yellow-500 p-4 h-18">
+		<a href="/">
+			<img src="{% static 'img/logo-extended.png' %}" alt="STU FCHPT logo" class="w-3/4">
+		</a>
+	</div>
+	<div class="flex flex-col items-center mt-32 leading-tight">
+            <span
+					class="text-bold text-yellow-500"
+					style="font-size: 10rem;"
+			>
+                403
+            </span>
+		<span class="text-bold text-2xl">
+                Na pristúpenie k tomuto zdroju nemáte dostatočné práva.
+            </span>
+
+		{% component 'ui-button' text="Ísť na domov" additional_classes="rounded-full w-32 h-8 mt-6" type="link" href='/' primary=True %}
+	</div>
+</div>
+{% endblock %}

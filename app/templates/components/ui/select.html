@@ -1,0 +1,47 @@
+{% load obj_get %}
+
+<div class="bg-gray-300 rounded flex flex-row items-center relative {{ additional_classes }}
+	{% if name in errors %}
+  	border-2 border-red-400 @endif
+	{% endif %}
+">
+    <select
+        class="bg-gray-300 focus:outline-none block w-full p-2 hover:cursor-pointer"
+        style="-moz-appearance: none;-webkit-appearance: none;appearance: none;"
+        name="{{ name }}"
+		{% if required %}
+		required
+		{% endif %}
+        {{ attributes | safe }}
+    >
+		{% obj_get request.POST name as old_value %}"
+		<option
+			value=""
+			{% if required %}
+			hidden
+			disabled
+			{% endif %}
+			{% if not old_value and not selected %}
+			selected
+			{% endif %}
+		>Vyberte možnosť...</option>
+		{% for item in items %}
+            <option value="{{item.id}}"
+				{% if selected == item.id or old_value == item.id %}
+				selected
+				{% endif %}
+			>
+                {{ item.name }}
+            </option>
+		{% endfor %}
+    </select>
+    <i class="fas fa-caret-down text-gray-700 absolute bg-gray-300 block pl-2 pr-1"
+       style="right:.3em;pointer-events: none;"
+    ></i>
+</div>
+{% if name in errors %}
+	<span class="ml-5 text-red-400 text-sm">
+		{% obj_get errors name as error %}
+		{{ error|first}}
+	</span>
+{% endif %}

@@ -1,0 +1,20 @@
+{% load component_tags %}
+
+<div
+    class="flex pb-3 flex-row
+		{{ additional_classes }}
+    	{% if center %}
+    	items-center
+    	{% endif %}
+	"
+>
+    <label
+        class="uppercase font-bold text-gray-500 text-sm block mr-2 w-1/5"
+     	{% if label_for is not None %}
+        for={{ label_for }}
+		{% endif %}
+    >
+		{{ key }}
+    </label>
+    {% slot content %}{% endslot %}
+</div>
