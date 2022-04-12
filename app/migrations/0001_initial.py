@@ -4,7 +4,6 @@ from django.conf import settings
 import django.contrib.auth.models
 import django.contrib.auth.validators
 from django.db import migrations, models
-import django.db.models.deletion
 import django.utils.timezone
 import uuid
 
@@ -15,6 +14,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ("labs", "0001_initial"),
+        ("tools", "0001_initial"),
         ("auth", "0012_alter_user_first_name_max_length"),
     ]
 
@@ -153,23 +153,6 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name="Tool",
-            fields=[
-                (
-                    "id",
-                    models.UUIDField(
-                        default=uuid.uuid4,
-                        editable=False,
-                        primary_key=True,
-                        serialize=False,
-                    ),
-                ),
-                ("name", models.CharField(max_length=255)),
-                ("type", models.CharField(max_length=50)),
-                ("available", models.BooleanField(default=True)),
-            ],
-        ),
-        migrations.CreateModel(
             name="Sample",
             fields=[
                 (
@@ -254,7 +237,7 @@ class Migration(migrations.Migration):
                         to="app.sample",
                     ),
                 ),
-                ("tools", models.ManyToManyField(to="app.tool")),
+                ("tools", models.ManyToManyField(to="tools.tool")),
             ],
         ),
         migrations.AddField(

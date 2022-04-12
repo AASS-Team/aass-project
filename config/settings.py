@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     "method_override",
     "app",
     "labs",
+    "tools",
 ]
 
 MIDDLEWARE = [
