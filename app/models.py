@@ -1,24 +1,10 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
 import uuid
 
+from users.models import User
 from labs.models import Lab
 from tools.models import Tool
 from grants.models import Grant
-
-
-class Role(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=50)
-
-
-class User(AbstractUser):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    role = models.ForeignKey(Role, on_delete=models.RESTRICT)
-
-    @property
-    def name(self):
-        return f"{self.first_name} {self.last_name}"
 
 
 class Sample(models.Model):

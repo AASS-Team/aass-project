@@ -1,16 +1,10 @@
 from rest_framework import serializers
+
 from .models import Sample, User
 from grants.models import Grant
 from labs.models import Lab
 from tools.models import Tool
-
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = "__all__"
-
-    name = serializers.ReadOnlyField()
+from users.serializers import UserSerializer
 
 
 class GrantSerializer(serializers.ModelSerializer):

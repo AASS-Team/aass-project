@@ -1,0 +1,80 @@
+[
+  {
+	"model": "users.role",
+	"pk": "04fe17df-9d85-49d8-8cf7-9dc596a3dd1a",
+	"fields": {
+	  "name": "admin"
+	}
+  },
+  {
+	"model": "users.role",
+	"pk": "27972876-abfb-4890-8ec2-5aa25206f08a",
+	"fields": {
+	  "name": "laborant"
+	}
+  },
+  {
+	"model": "users.role",
+	"pk": "722ca7d6-5ea7-4f07-9bc2-582c2efb8169",
+	"fields": {
+	  "name": "user"
+	}
+  },
+  {
+	"model": "users.user",
+	"pk": "1f0b2132-80a8-4b98-8cd3-bae9a588078b",
+	"fields": {
+	  "first_name": "Admin",
+	  "last_name": "Administratívny",
+	  "username": "admin",
+	  "email": "admin@admin.sk",
+	  "password": "nbusr123",
+	  "last_login": "2007-01-04T05:39:21Z",
+	  "is_superuser": false,
+	  "is_staff": false,
+	  "is_active": true,
+	  "date_joined": "2022-04-09T20:51:56.402Z",
+	  "role": "04fe17df-9d85-49d8-8cf7-9dc596a3dd1a",
+	  "groups": [],
+	  "user_permissions": []
+	}
+  },
+  {
+	"model": "users.user",
+	"pk": "1f0b2132-80a8-4b98-8cd3-bae9a588078b",
+	"fields": {
+	  "first_name": "Laborant",
+	  "last_name": "Laboratívny",
+	  "username": "laborant",
+	  "email": "laborant@laborant.sk",
+	  "password": "nbusr123",
+	  "last_login": "2007-01-04T05:39:21Z",
+	  "is_superuser": false,
+	  "is_staff": false,
+	  "is_active": true,
+	  "date_joined": "2022-04-09T20:51:56.402Z",
+	  "role": "27972876-abfb-4890-8ec2-5aa25206f08a",
+	  "groups": [],
+	  "user_permissions": []
+	}
+  },
+  {
+	"model": "users.user",
+	"pk": "4386280d-00d4-4677-a2c5-a68c66ec6825",
+	"fields": {
+	  "first_name": "Používateľ",
+	  "last_name": "Použitý",
+	  "password": "nbusr123",
+	  "username": "user",
+	  "email": "user@user.sk",
+	  "last_login": "1970-01-01T04:51:49Z",
+	  "is_superuser": false,
+	  "is_staff": false,
+	  "is_active": true,
+	  "date_joined": "2022-04-09T20:51:56.402Z",
+	  "role": "722ca7d6-5ea7-4f07-9bc2-582c2efb8169",
+	  "groups": [],
+	  "user_permissions": []
+	}
+  }
+]

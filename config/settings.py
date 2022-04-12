@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     "tools",
     "analyses",
     "grants",
+    "users",
 ]
 
 MIDDLEWARE = [
@@ -147,7 +148,7 @@ USE_TZ = True
 STATIC_URL = "static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
-AUTH_USER_MODEL = "app.User"
+AUTH_USER_MODEL = "users.User"
 
 APP = {
     "AUTHOR": require_env("APP_NAME"),

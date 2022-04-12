@@ -1,0 +1,60 @@
+{% extends 'app.html' %}
+
+{% load component_tags %}
+{% load obj_get %}
+
+{% block title %}Nový používateľ{% endblock %}
+
+{% block content %}
+
+<div class="bg-white rounded-lg">
+	<div class="p-4 pl-6">
+		<form action="{% url 'user-list' %}" method="POST">
+			{% csrf_token %}
+
+			{# username #}
+			{% component_block 'ui-label' key="username" label_for="username" center=True %}
+				{% slot content %}
+					{% obj_get request.POST 'username' as value %}
+					{% component 'ui-input' name="username" type="text" additional_classes="text-gray-700" required=True value=value errors=errors%}
+				{% endslot %}
+			{% endcomponent_block %}
+
+			{# meno #}
+			{% component_block 'ui-label' key="meno" label_for="first_name" center=True %}
+				{% slot content %}
+					{% obj_get request.POST 'first_name' as value %}
+					{% component 'ui-input' name="first_name" type="text" additional_classes="text-gray-700" required=True value=value errors=errors%}
+				{% endslot %}
+			{% endcomponent_block %}
+
+			{# priezvisko #}
+			{% component_block 'ui-label' key="priezvisko" label_for="last_name" center=True %}
+				{% slot content %}
+					{% obj_get request.POST 'last_name' as value %}
+					{% component 'ui-input' name="last_name" type="text" additional_classes="text-gray-700" required=True value=value errors=errors%}
+				{% endslot %}
+			{% endcomponent_block %}
+
+			{# heslo #}
+			{% component_block 'ui-label' key="heslo" label_for="password" center=True %}
+				{% slot content %}
+					{% obj_get request.POST 'password' as value %}
+					{% component 'ui-input' name="password" type="password" additional_classes="text-gray-700" required=True value=value errors=errors%}
+				{% endslot %}
+			{% endcomponent_block %}
+
+			{# rola #}
+			{% component_block 'ui-label' key="rola" label_for="role" center=True %}
+				{% slot content %}
+					{% component 'ui-select' name="role" items=roles additional_classes="text-gray-700 w-1/4" required=True errors=errors%}
+				{% endslot %}
+			{% endcomponent_block %}
+
+			<div class="flex flex-row justify-end mt-5">
+				{% component 'ui-button' additional_classes="rounded-full w-24" text="Uložiť" type="submit" primary=True %}
+			</div>
+		</form>
+	</div>
+</div>
+{% endblock %}

@@ -40,7 +40,6 @@
 				{% component 'ui-search' additional_classes="shadow-sm border mr-3" value=request.GET.search extendable="True" %}
 			</form>
 
-			{% url 'sample-new' as url_new %}
 			{% component 'ui-button' icon="fas fa-plus" additional_classes="rounded-full" text="Pridať analýzu" type="link" href='new' primary=True %}
 		</div>
 	</div>
