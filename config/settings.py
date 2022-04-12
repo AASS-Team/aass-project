@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     "django_extensions",
     "method_override",
     "app",
+    "labs",
 ]
 
 MIDDLEWARE = [

@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 import uuid
 
+from labs.models import Lab
 
 class Grant(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -30,13 +31,6 @@ class Sample(models.Model):
     note = models.CharField(max_length=255, blank=True)
     amount = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
-
-
-class Lab(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=255)
-    address = models.CharField(max_length=255)
-    available = models.BooleanField(default=True)
 
 
 class Tool(models.Model):
