@@ -1,0 +1,33 @@
+{% extends 'app.html' %}
+
+{% load component_tags %}
+{% load method_override %}
+
+{% block title %}{{ grant.name }}{% endblock %}
+
+{% block content %}
+	<div class="bg-white rounded-lg">
+		<div class="p-4 pl-6">
+			<h1 class="text-2xl mb-10">
+				{{ grant.name }}
+			</h1>
+
+			{# grant #}
+			{% component_block 'ui-label' key="grant" center=True %}
+				{% slot content %}
+					{# TODO #}
+					{# @can('admin') #}
+					{# <a #}
+					{#	class="text-blue-600 hover:underline"#}
+					{#	href="{{ url('/users',$sample->user->id) }}"#}
+					{#	>#}
+					{#	{{ $sample->user->login }}#}
+					{#	</a>#}
+					<p>
+						{{ grant.name|truncatewords:10 }}
+					</p>
+				{% endslot %}
+			{% endcomponent_block %}
+		</div>
+	</div>
+{% endblock %}

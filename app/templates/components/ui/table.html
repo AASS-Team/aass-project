@@ -28,7 +28,7 @@
 				class="hover:cursor-pointer hover:bg-gray-100 table w-full relative"
 				style="table-layout: fixed;"
 				{% if options.data.onclick is not None %}
-				onclick="window.location = '{% url 'sample-detail' item.id %}'"
+				onclick="window.location = '{% url options.data.onclick item.id %}'"
 				{% endif %}
 			>
 				{% slot "table_item" %}{% endslot %}

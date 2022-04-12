@@ -15,6 +15,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ("labs", "0001_initial"),
         ("tools", "0001_initial"),
+        ("grants", "0001_initial"),
         ("auth", "0012_alter_user_first_name_max_length"),
     ]
 
@@ -123,21 +124,6 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name="Grant",
-            fields=[
-                (
-                    "id",
-                    models.UUIDField(
-                        default=uuid.uuid4,
-                        editable=False,
-                        primary_key=True,
-                        serialize=False,
-                    ),
-                ),
-                ("name", models.CharField(max_length=255)),
-            ],
-        ),
-        migrations.CreateModel(
             name="Role",
             fields=[
                 (
@@ -173,7 +159,7 @@ class Migration(migrations.Migration):
                     models.ForeignKey(
                         null=True,
                         on_delete=django.db.models.deletion.RESTRICT,
-                        to="app.grant",
+                        to="grants.grant",
                     ),
                 ),
                 (

@@ -1,5 +1,8 @@
 from rest_framework import serializers
-from .models import Sample, Tool, User, Grant, Tool, Lab
+from .models import Sample, User
+from grants.models import Grant
+from labs.models import Lab
+from tools.models import Tool
 
 
 class UserSerializer(serializers.ModelSerializer):
