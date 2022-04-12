@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_components",
     "django_seed",
+    "django_extensions",
     "method_override",
     "app",
 ]

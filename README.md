@@ -73,7 +73,7 @@ docker-compose exec web pipenv run flush
 If something went wrong with migrations, you can remove all migrations using following command:
 
 ```
-docker-compose exec web pipenv run migrate zero
+docker-compose exec web pipenv run reset
 ```
 
 
