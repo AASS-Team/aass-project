@@ -55,6 +55,7 @@ class LabsList(APIView):
 
 
             messages.add_message(request, messages.ERROR, "Nepodarilo sa uložiť laboratórium")
+            labs
             return Response(
                 data={
                     "labs": labs.data,
@@ -64,9 +65,9 @@ class LabsList(APIView):
                 template_name="labs/create.html",
             )
 
-        messages.add_message(request, messages.SUCCESS, "Laboratórium uložená")
-        serializer.save()
-        return redirect("labs-list")
+        messages.add_message(request, messages.SUCCESS, "Laboratórium uložené")
+        serializer.save(available=True)
+        return redirect("lab-list")
 
 
 class LabCreate(APIView):

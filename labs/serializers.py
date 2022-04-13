@@ -8,4 +8,4 @@ class LabSerializer(serializers.ModelSerializer):
         model = Lab
         fields = "__all__"
 
-
+    available = serializers.ReadOnlyField()
