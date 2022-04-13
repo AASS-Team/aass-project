@@ -24,7 +24,7 @@ class SampleList(APIView):
         options = {
             "data": {
                 "items": samples,
-                "onclick": "/samples/",
+                "onclick": "sample-detail",
                 "empty": "Ľutujeme, nenašli sa žiadne vzorky",
             },
             "header": {

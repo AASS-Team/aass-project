@@ -12,22 +12,19 @@
 				{{ grant.name }}
 			</h1>
 
-			{# grant #}
-			{% component_block 'ui-label' key="grant" center=True %}
-				{% slot content %}
-					{# TODO #}
-					{# @can('admin') #}
-					{# <a #}
-					{#	class="text-blue-600 hover:underline"#}
-					{#	href="{{ url('/users',$sample->user->id) }}"#}
-					{#	>#}
-					{#	{{ $sample->user->login }}#}
-					{#	</a>#}
-					<p>
-						{{ grant.name|truncatewords:10 }}
-					</p>
-				{% endslot %}
-			{% endcomponent_block %}
+			<div class="flex flex-row justify-end mt-5">
+				{% url 'grant-edit' grant.id as grant_edit_url %}
+				{% component 'ui-button' additional_classes="rounded-full ml-3" text="Upraviť grant" primary=True type="link" href=grant_edit_url %}
+
+				{# TODO #}
+				{# if not used #}
+				{# @can('admin')#}
+				<form action="{% url 'grant-detail' grant.id %}" method="POST">
+					{% csrf_token %}
+					{% method_override 'DELETE' %}
+					{% component 'ui-button' additional_classes="rounded-full ml-3" text="Vymazať grant" danger=True type="submit" %}
+				</form>
+			</div>
 		</div>
 	</div>
 {% endblock %}

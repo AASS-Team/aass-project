@@ -48,9 +48,6 @@
 	{% component_block 'ui-table' options=options %}
 		{% slot table_item %}
 			<td class="{% get_table_row_class options 0 %}">
-				{{  item.id }}
-			</td>
-			<td class="{% get_table_row_class options 1 %}">
 				{{  item.name }}
 			</td>
 		{% endslot %}
