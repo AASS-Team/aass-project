@@ -6,10 +6,10 @@ from labs.models import Lab
 from tools.models import Tool
 from app.serializers import (
     SampleSerializer,
-    UserSerializer,
     ToolSerializer,
     LabSerializer,
 )
+from users.serializers import UserSerializer
 
 
 class AnalysisSerializer(serializers.ModelSerializer):

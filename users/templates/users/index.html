@@ -3,7 +3,7 @@
 {% load component_tags %}
 {% load get_table_row_class %}
 
-{% block title %}Granty{% endblock %}
+{% block title %}Používatelia{% endblock %}
 
 {% block script %}
 <script defer>
@@ -25,7 +25,7 @@
 	<div class="bg-white rounded-lg">
 	<div class="p-4 pl-6 flex justify-between">
 		<h1 class="text-2xl">
-			Granty
+			Používatelia
 		</h1>
 		<div class="flex justify-end">
 			<form action="{{ request.build_absolute_uri }}" id="searchForm" class="inline">
@@ -40,14 +40,20 @@
 				{% component 'ui-search' additional_classes="shadow-sm border mr-3" value=request.GET.search extendable="True" %}
 			</form>
 
-			{% component 'ui-button' icon="fas fa-plus" additional_classes="rounded-full" text="Pridať grant" type="link" href='new' primary=True %}
+			{% component 'ui-button' icon="fas fa-plus" additional_classes="rounded-full" text="Pridať používateľa" type="link" href='new' primary=True %}
 		</div>
 	</div>
 
 	{% component_block 'ui-table' options=options %}
 		{% slot table_item %}
 			<td class="{% get_table_row_class options 0 %}">
-				{{  item.name }}
+				{{  item.name|truncatewords:10 }}
+			</td>
+			<td class="{% get_table_row_class options 1 %}">
+				{{  item.user.name }}
+			</td>
+			<td class="{% get_table_row_class options 2 %}">
+				{{  item.created_at }}
 			</td>
 		{% endslot %}
 	{% endcomponent_block %}

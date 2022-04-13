@@ -12,7 +12,6 @@ from .models import Analysis
 
 
 class AnalysisList(APIView):
-
     """
     List all analyses, or create a new analysis.
     """
@@ -52,7 +51,6 @@ class AnalysisList(APIView):
         )
 
     def post(self, request, format=None):
-
         serializer = self.serializer_class(
             data=request.data,
         )
@@ -131,15 +129,20 @@ class AnalysisDetail(APIView):
     def put(self, request, id, format=None):
         analysis = self.get_object(id)
         serializer = serializers.AnalysisSerializer(analysis, data=request.data)
+        labs = serializers.LabSerializer(Lab.objects.all(), many=True)
+        samples = serializers.SampleSerializer(Sample.objects.all(), many=True)
+        users = serializers.UserSerializer(User.objects.all(), many=True)
+        tools = ToolSerializer(Tool.objects.all(), many=True)
 
         if not serializer.is_valid():
-
             messages.add_message(request, messages.ERROR, "Nepodarilo sa uložiť vzorku")
             return Response(
                 data={
-                    "sample": serializer.data,
-                    # "users": users.data,
-                    # "grants": grants.data,
+                    "analysis": serializer.data,
+                    "samples": samples.data,
+                    "labs": labs.data,
+                    "laborants": users.data,
+                    "tools": tools.data,
                 },
                 template_name="analyses/edit.html",
             )

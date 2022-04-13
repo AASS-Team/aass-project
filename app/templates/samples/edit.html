@@ -42,7 +42,7 @@
 				{% component_block 'ui-label' key="množstvo" label_for="amount" center=True %}
 					{% slot content %}
 						{% obj_get request.POST 'amount' as old_value %}
-						{% firstof sample.amount old_value as value %}
+						{% firstof old_value sample.amount as value %}
 						{% component 'ui-input' name="amount" type="number" additional_classes="text-gray-700" required=True value=value errors=errors%}
 						<span class="ml-3 text-gray-500 text-sm">ml</span>
 					{% endslot %}
