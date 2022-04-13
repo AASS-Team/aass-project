@@ -6,8 +6,9 @@ from rest_framework.response import Response
 from rest_framework.renderers import TemplateHTMLRenderer
 
 from . import serializers
-from .models import Sample, User
+from .models import Sample
 from grants.models import Grant
+from users.models import User
 
 
 class SampleList(APIView):

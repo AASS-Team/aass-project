@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from app.models import Grant
+from samples.models import Grant
 
 
 class GrantSerializer(serializers.ModelSerializer):

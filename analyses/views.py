@@ -5,10 +5,16 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.renderers import TemplateHTMLRenderer
 
-from . import serializers
-from app.serializers import ToolSerializer
-from app.models import Sample, User, Lab, Tool
 from .models import Analysis
+from .serializers import AnalysisSerializer
+from samples.models import Sample
+from samples.serializers import SampleSerializer
+from users.models import User
+from users.serializers import UserSerializer
+from tools.models import Tool
+from tools.serializers import ToolSerializer
+from labs.models import Lab
+from labs.serializers import LabSerializer
 
 
 class AnalysisList(APIView):
@@ -16,7 +22,7 @@ class AnalysisList(APIView):
     List all analyses, or create a new analysis.
     """
 
-    serializer_class = serializers.AnalysisSerializer
+    serializer_class = AnalysisSerializer
     renderer_classes = [TemplateHTMLRenderer]
 
     def get(self, request, format=None):
@@ -56,9 +62,9 @@ class AnalysisList(APIView):
         )
 
         if not serializer.is_valid():
-            samples = serializers.SampleSerializer(Sample.objects.all(), many=True)
-            lab = serializers.LabSerializer(Lab.objects.all(), many=True)
-            users = serializers.UserSerializer(User.objects.all(), many=True)
+            samples = SampleSerializer(Sample.objects.all(), many=True)
+            lab = LabSerializer(Lab.objects.all(), many=True)
+            users = UserSerializer(User.objects.all(), many=True)
             tools = ToolSerializer(Tool.objects.all(), many=True)
 
             messages.add_message(
@@ -90,9 +96,9 @@ class AnalysisCreate(APIView):
     renderer_classes = [TemplateHTMLRenderer]
 
     def get(self, request, format=None):
-        labs = serializers.LabSerializer(Lab.objects.all(), many=True)
-        samples = serializers.SampleSerializer(Sample.objects.all(), many=True)
-        users = serializers.UserSerializer(User.objects.all(), many=True)
+        labs = LabSerializer(Lab.objects.all(), many=True)
+        samples = SampleSerializer(Sample.objects.all(), many=True)
+        users = UserSerializer(User.objects.all(), many=True)
         tools = ToolSerializer(Tool.objects.all(), many=True)
 
         return Response(
@@ -121,17 +127,17 @@ class AnalysisDetail(APIView):
 
     def get(self, request, id, format=None):
         analysis = self.get_object(id)
-        serializer = serializers.AnalysisSerializer(analysis)
+        serializer = AnalysisSerializer(analysis)
         return Response(
             data={"analysis": serializer.data}, template_name="analyses/detail.html"
         )
 
     def put(self, request, id, format=None):
         analysis = self.get_object(id)
-        serializer = serializers.AnalysisSerializer(analysis, data=request.data)
-        labs = serializers.LabSerializer(Lab.objects.all(), many=True)
-        samples = serializers.SampleSerializer(Sample.objects.all(), many=True)
-        users = serializers.UserSerializer(User.objects.all(), many=True)
+        serializer = AnalysisSerializer(analysis, data=request.data)
+        labs = LabSerializer(Lab.objects.all(), many=True)
+        samples = SampleSerializer(Sample.objects.all(), many=True)
+        users = UserSerializer(User.objects.all(), many=True)
         tools = ToolSerializer(Tool.objects.all(), many=True)
 
         if not serializer.is_valid():
@@ -180,10 +186,10 @@ class AnalysisEdit(APIView):
 
     def get(self, request, id, format=None):
         analysis = self.get_object(id)
-        serializer = serializers.AnalysisSerializer(analysis)
-        labs = serializers.LabSerializer(Lab.objects.all(), many=True)
-        samples = serializers.SampleSerializer(Sample.objects.all(), many=True)
-        users = serializers.UserSerializer(User.objects.all(), many=True)
+        serializer = AnalysisSerializer(analysis)
+        labs = LabSerializer(Lab.objects.all(), many=True)
+        samples = SampleSerializer(Sample.objects.all(), many=True)
+        users = UserSerializer(User.objects.all(), many=True)
         tools = ToolSerializer(Tool.objects.all(), many=True)
 
         return Response(

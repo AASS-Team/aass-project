@@ -1,6 +1,6 @@
 [
   {
-	"model": "app.sample",
+	"model": "samples.sample",
 	"pk": "14b25a7e-baba-4b1b-94f3-501e38a02e61",
 	"fields": {
 	  "grant": "044f00a8-d337-45c3-b90e-a602016b59c6",
@@ -12,7 +12,7 @@
 	}
   },
   {
-	"model": "app.sample",
+	"model": "samples.sample",
 	"pk": "177c7a47-bed6-4d6b-9dc4-e773fa358097",
 	"fields": {
 	  "grant": null,

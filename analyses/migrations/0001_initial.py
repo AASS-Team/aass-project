@@ -11,9 +11,9 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ("app", "0001_initial"),
         ("tools", "0001_initial"),
         ("labs", "0001_initial"),
+        ("samples", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
@@ -66,7 +66,7 @@ class Migration(migrations.Migration):
                     models.ForeignKey(
                         null=True,
                         on_delete=django.db.models.deletion.RESTRICT,
-                        to="app.sample",
+                        to="samples.sample",
                     ),
                 ),
                 ("tools", models.ManyToManyField(to="tools.tool")),

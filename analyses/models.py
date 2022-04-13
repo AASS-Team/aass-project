@@ -1,5 +1,5 @@
 from django.db import models
-from app.models import Sample, User, Lab, Tool
+from samples.models import Sample, User, Lab, Tool
 import uuid
 
 

@@ -1,15 +1,15 @@
 from rest_framework import serializers
 
 from .models import Analysis
-from app.models import User, Sample
-from labs.models import Lab
-from tools.models import Tool
-from app.serializers import (
+from samples.models import User, Sample
+from samples.serializers import (
     SampleSerializer,
-    ToolSerializer,
-    LabSerializer,
 )
 from users.serializers import UserSerializer
+from labs.models import Lab
+from labs.serializers import LabSerializer
+from tools.models import Tool
+from tools.serializers import ToolSerializer
 
 
 class AnalysisSerializer(serializers.ModelSerializer):

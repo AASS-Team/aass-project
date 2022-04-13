@@ -1,16 +1,9 @@
 from rest_framework import serializers
 
-from .models import Sample, User
+from samples.models import Sample, User
 from grants.models import Grant
-from labs.models import Lab
-from tools.models import Tool
+from grants.serializers import GrantSerializer
 from users.serializers import UserSerializer
-
-
-class GrantSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Grant
-        fields = "__all__"
 
 
 class SampleSerializer(serializers.ModelSerializer):
@@ -27,15 +20,3 @@ class SampleSerializer(serializers.ModelSerializer):
         self.fields["user"] = UserSerializer()
         self.fields["grant"] = GrantSerializer()
         return super(SampleSerializer, self).to_representation(instance)
-
-
-class LabSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Lab
-        fields = "__all__"
-
-
-class ToolSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Tool
-        fields = "__all__"
