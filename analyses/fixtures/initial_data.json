@@ -1,0 +1,36 @@
+[
+  {
+	"model": "analyses.analysis",
+	"pk": "01b7f288-4311-4c62-8a24-8aeea22b0054",
+	"fields": {
+	  "sample": "177c7a47-bed6-4d6b-9dc4-e773fa358097",
+	  "laborant": "4386280d-00d4-4677-a2c5-a68c66ec6825",
+	  "lab": "431406e8-fbbd-4b54-a5cd-01173f681580",
+	  "status": "Pending",
+	  "structure": null,
+	  "created_at": "2022-04-13T02:14:11.365Z",
+	  "started_at": null,
+	  "ended_at": null,
+	  "tools": [
+		"d9117dfe-fd10-4fba-8a20-8f1f75319d1a"
+	  ]
+	}
+  },
+  {
+	"model": "analyses.analysis",
+	"pk": "237dda02-2faa-429a-8a14-df03a9b53eae",
+	"fields": {
+	  "sample": "14b25a7e-baba-4b1b-94f3-501e38a02e61",
+	  "laborant": "4386280d-00d4-4677-a2c5-a68c66ec6825",
+	  "lab": "431406e8-fbbd-4b54-a5cd-01173f681580",
+	  "status": "Pending",
+	  "structure": null,
+	  "created_at": "2022-04-13T02:14:27.590Z",
+	  "started_at": null,
+	  "ended_at": null,
+	  "tools": [
+		"818decb5-fe22-49b0-9284-453bc50dd66c"
+	  ]
+	}
+  }
+]

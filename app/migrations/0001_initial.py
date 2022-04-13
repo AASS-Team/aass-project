@@ -15,6 +15,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ("labs", "0001_initial"),
         ("tools", "0001_initial"),
+        ("grants", "0001_initial"),
         ("auth", "0012_alter_user_first_name_max_length"),
     ]
 
@@ -123,21 +124,6 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name="Grant",
-            fields=[
-                (
-                    "id",
-                    models.UUIDField(
-                        default=uuid.uuid4,
-                        editable=False,
-                        primary_key=True,
-                        serialize=False,
-                    ),
-                ),
-                ("name", models.CharField(max_length=255)),
-            ],
-        ),
-        migrations.CreateModel(
             name="Role",
             fields=[
                 (
@@ -173,7 +159,7 @@ class Migration(migrations.Migration):
                     models.ForeignKey(
                         null=True,
                         on_delete=django.db.models.deletion.RESTRICT,
-                        to="app.grant",
+                        to="grants.grant",
                     ),
                 ),
                 (
@@ -183,61 +169,6 @@ class Migration(migrations.Migration):
                         to=settings.AUTH_USER_MODEL,
                     ),
                 ),
-            ],
-        ),
-        migrations.CreateModel(
-            name="Analysis",
-            fields=[
-                (
-                    "id",
-                    models.UUIDField(
-                        default=uuid.uuid4,
-                        editable=False,
-                        primary_key=True,
-                        serialize=False,
-                    ),
-                ),
-                (
-                    "status",
-                    models.CharField(
-                        choices=[
-                            ("Finished", "Finished"),
-                            ("Pending", "Pending"),
-                            ("In progress", "In Progress"),
-                        ],
-                        max_length=12,
-                    ),
-                ),
-                ("structure", models.CharField(max_length=255, null=True)),
-                ("amount", models.FloatField()),
-                ("created_at", models.DateTimeField(auto_now_add=True)),
-                ("started_at", models.DateTimeField()),
-                ("ended_at", models.DateTimeField()),
-                (
-                    "lab",
-                    models.ForeignKey(
-                        null=True,
-                        on_delete=django.db.models.deletion.RESTRICT,
-                        to="labs.lab",
-                    ),
-                ),
-                (
-                    "laborant",
-                    models.ForeignKey(
-                        null=True,
-                        on_delete=django.db.models.deletion.RESTRICT,
-                        to=settings.AUTH_USER_MODEL,
-                    ),
-                ),
-                (
-                    "sample",
-                    models.ForeignKey(
-                        null=True,
-                        on_delete=django.db.models.deletion.RESTRICT,
-                        to="app.sample",
-                    ),
-                ),
-                ("tools", models.ManyToManyField(to="tools.tool")),
             ],
         ),
         migrations.AddField(

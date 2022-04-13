@@ -1,0 +1,23 @@
+[
+  {
+	"model": "grants.grant",
+	"pk": "044f00a8-d337-45c3-b90e-a602016b59c6",
+	"fields": {
+	  "name": "Dotácia z Európskej Únie"
+	}
+  },
+  {
+	"model": "grants.grant",
+	"pk": "7da1893f-28ac-4acb-a272-69888dad14a8",
+	"fields": {
+	  "name": "Grant fondu FCHPT STU"
+	}
+  },
+  {
+	"model": "grants.grant",
+	"pk": "a02a438c-699e-4fa9-91bf-aa514c618fc9",
+	"fields": {
+	  "name": "Grant na výskum vedy a školstva"
+	}
+  }
+]

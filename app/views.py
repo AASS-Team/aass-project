@@ -6,7 +6,8 @@ from rest_framework.response import Response
 from rest_framework.renderers import TemplateHTMLRenderer
 
 from . import serializers
-from .models import Sample, User, Grant
+from .models import Sample, User
+from grants.models import Grant
 
 
 class SampleList(APIView):
@@ -23,7 +24,7 @@ class SampleList(APIView):
         options = {
             "data": {
                 "items": samples,
-                "onclick": "/samples/",
+                "onclick": "sample-detail",
                 "empty": "Ľutujeme, nenašli sa žiadne vzorky",
             },
             "header": {

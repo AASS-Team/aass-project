@@ -21,4 +21,6 @@ handler403 = "config.views.permission_denied_view"
 
 urlpatterns = [
     path("", include("app.urls")),
+    path("", include("analyses.urls")),
+    path("", include("grants.urls")),
 ]
