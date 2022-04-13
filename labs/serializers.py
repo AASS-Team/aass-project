@@ -7,3 +7,5 @@ class LabSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lab
         fields = "__all__"
+
+

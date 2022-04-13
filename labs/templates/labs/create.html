@@ -1,0 +1,39 @@
+{% extends 'app.html' %}
+
+{% load component_tags %}
+{% load obj_get %}
+
+{% block title %}Nové laboratórium{% endblock %}
+
+{% block content %}
+
+<div class="bg-white rounded-lg">
+	<div class="p-4 pl-6">
+		<form action="{% url 'lab-list' %}" method="POST">
+			{% csrf_token %}
+			<h1 class="text-2xl">
+				Pridanie Laboratória
+			</h1>
+
+			{# Lab #}
+			{% component_block 'ui-label' key="lab" label_for="note" %}
+				{% slot content %}
+                    <textarea
+						name="note"
+						class="text-gray-700 w-2/3 bg-gray-300 p-2 rounded focus:outline-none placeholder-gray-500
+						{% if 'note' in errors %}
+						border-2 border-red-500
+						{% endif %}
+						"
+						rows="4"
+					>{% obj_get request.POST 'note' %}</textarea>
+				{% endslot %}
+			{% endcomponent_block %}
+
+			<div class="flex flex-row justify-end mt-5">
+				{% component 'ui-button' additional_classes="rounded-full w-24" text="Uložiť" type="submit" primary=True %}
+			</div>
+		</form>
+	</div>
+</div>
+{% endblock %}
