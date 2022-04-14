@@ -1,0 +1,31 @@
+{% extends 'app.html' %}
+
+{% load obj_get %}
+{% load method_override %}
+
+{% block title %}Upraviť nástroj {{ tool.name }}{% endblock %}
+
+{% block content %}
+    <div class="bg-white rounded-lg">
+        <div class="p-4 pl-6">
+            <form action="{%  url 'tool-detail' tool.id %}" method="POST">
+                {% csrf_token %}
+                {% method_override 'PUT' %}
+
+                <input
+                    name="name"
+                    type="text"
+                    class="text-2xl border-b-2 border-gray-300 focus:outline-none focus:border-yellow-500 w-1/3
+                    {% if 'name' in errors %}
+                    border-2 border-red-500
+                    {% endif %}"
+                    value="{% obj_get request.POST 'name' tool.name %}"
+                >
+
+                <div class="flex flex-row justify-end mt-5">
+                    {% component 'ui-button' additional_classes="rounded-full w-24" text="Uložiť" type="submit" primary=True %}
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

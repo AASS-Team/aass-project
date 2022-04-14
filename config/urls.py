@@ -24,4 +24,5 @@ urlpatterns = [
     path("", include("grants.urls")),
     path("", include("users.urls")),
     path("", include("labs.urls")),
+    path("", include("tools.urls")),
 ]

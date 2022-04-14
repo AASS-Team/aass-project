@@ -31,6 +31,7 @@ class Administration(LoginRequiredMixin, APIView):
     """
     Administration router
     """
+
     renderer_classes = [TemplateHTMLRenderer]
 
     # @method_decorator(permission_required("app.view_administration", raise_exception=True))

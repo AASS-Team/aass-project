@@ -7,3 +7,5 @@ class ToolSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tool
         fields = "__all__"
+
+    available = serializers.ReadOnlyField()

@@ -1,0 +1,47 @@
+{% extends 'app.html' %}
+
+{% load method_override %}
+
+{% block title %}{{ tool.name }}{% endblock %}
+
+{% block content %}
+    <div class="bg-white rounded-lg">
+        <div class="p-4 pl-6">
+            <h1 class="text-2xl mb-10">
+                {{ tool.name }}
+            </h1>
+
+            {# typ #}
+            {% component_block 'ui-label' key="type" %}
+                {% slot content %}
+                    <p>
+                        {{ tool.type }}
+                    </p>
+                {% endslot %}
+            {% endcomponent_block %}
+
+            {# dostupnost #}
+            {% component_block 'ui-label' key="dostupnost" %}
+                {% slot content %}
+                    <p>
+                        {{ tool.available }}
+                    </p>
+                {% endslot %}
+            {% endcomponent_block %}
+
+            <div class="flex flex-row justify-end mt-5">
+                {% url 'tool-edit' tool.id as tool_edit_url %}
+                {% component 'ui-button' additional_classes="rounded-full ml-3" text="Upraviť nástroj" primary=True type="link" href=tool_edit_url %}
+
+                {# TODO #}
+                {# if not used #}
+                {# @can('admin')#}
+                <form action="{% url 'tool-detail' tool.id %}" method="POST">
+                    {% csrf_token %}
+                    {% method_override 'DELETE' %}
+                    {% component 'ui-button' additional_classes="rounded-full ml-3" text="Vymazať nástroj" danger=True type="submit" %}
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

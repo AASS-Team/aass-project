@@ -18,5 +18,5 @@ urlpatterns = [
         name="password_change_done",
     ),
     path("logout/", views.Logout.as_view(), name="logout"),
-    path("administration/", views.Administration.as_view(), name="administration")
+    path("administration/", views.Administration.as_view(), name="administration"),
 ]
