@@ -22,6 +22,7 @@ handler403 = "config.views.permission_denied_view"
 
 urlpatterns = [
     path("", RedirectView.as_view(url="samples", permanent=False)),
+    path("", include("app.urls")),
     path("", include("samples.urls")),
     path("", include("analyses.urls")),
     path("", include("grants.urls")),

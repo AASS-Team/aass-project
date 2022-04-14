@@ -156,6 +156,8 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 
 AUTH_USER_MODEL = "users.User"
 AUTHENTICATION_BACKENDS = ["users.backends.AuthenticationBackend"]
+LOGIN_URL = "/login"
+LOGIN_REDIRECT_URL = "/"
 
 APP = {
     "AUTHOR": require_env("APP_NAME"),
