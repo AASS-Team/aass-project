@@ -1,7 +1,9 @@
+from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Group
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.utils.decorators import method_decorator
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -19,6 +21,7 @@ class UserList(LoginRequiredMixin, APIView):
     serializer_class = serializers.UserSerializer
     renderer_classes = [TemplateHTMLRenderer]
 
+    @method_decorator(permission_required("users.view_user", raise_exception=True))
     def get(self, request, format=None):
         users = User.objects.all()
         serializer = self.serializer_class(users, many=True)
@@ -44,6 +47,7 @@ class UserList(LoginRequiredMixin, APIView):
             template_name="users/index.html",
         )
 
+    @method_decorator(permission_required("users.add_user", raise_exception=True))
     def post(self, request, format=None):
         serializer = self.serializer_class(data=request.data)
 
@@ -71,6 +75,7 @@ class UserCreate(LoginRequiredMixin, APIView):
 
     renderer_classes = [TemplateHTMLRenderer]
 
+    @method_decorator(permission_required("users.add_user", raise_exception=True))
     def get(self, request, format=None):
         groups = serializers.GroupSerializer(Group.objects.all(), many=True)
 
@@ -93,6 +98,7 @@ class UserDetail(LoginRequiredMixin, APIView):
         except User.DoesNotExist:
             return redirect("404")
 
+    @method_decorator(permission_required("users.view_user", raise_exception=True))
     def get(self, request, id, format=None):
         user = self.get_object(id)
         serializer = serializers.UserSerializer(user)
@@ -100,6 +106,7 @@ class UserDetail(LoginRequiredMixin, APIView):
             data={"user": serializer.data}, template_name="users/detail.html"
         )
 
+    @method_decorator(permission_required("users.change_user", raise_exception=True))
     def put(self, request, id, format=None):
         user = self.get_object(id)
         serializer = serializers.UserSerializer(user, data=request.data)
@@ -121,6 +128,7 @@ class UserDetail(LoginRequiredMixin, APIView):
             data={"user": serializer.data}, template_name="users/detail.html"
         )
 
+    @method_decorator(permission_required("users.delete_user", raise_exception=True))
     def delete(self, request, id, format=None):
         user = self.get_object(id)
         deleted_rows = user.delete()
@@ -146,6 +154,7 @@ class UserEdit(LoginRequiredMixin, APIView):
         except User.DoesNotExist:
             return redirect("404")
 
+    @method_decorator(permission_required("users.change_user", raise_exception=True))
     def get(self, request, id, format=None):
         user = self.get_object(id)
         serializer = serializers.UserSerializer(user)

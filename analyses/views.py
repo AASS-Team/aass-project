@@ -1,6 +1,8 @@
+from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.utils.decorators import method_decorator
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -26,6 +28,9 @@ class AnalysisList(LoginRequiredMixin, APIView):
     serializer_class = AnalysisSerializer
     renderer_classes = [TemplateHTMLRenderer]
 
+    @method_decorator(
+        permission_required("analyses.view_analysis", raise_exception=True)
+    )
     def get(self, request, format=None):
         analyses = Analysis.objects.all()
         serializer = self.serializer_class(analyses, many=True)
@@ -57,6 +62,9 @@ class AnalysisList(LoginRequiredMixin, APIView):
             template_name="analyses/index.html",
         )
 
+    @method_decorator(
+        permission_required("analyses.add_analysis", raise_exception=True)
+    )
     def post(self, request, format=None):
         serializer = self.serializer_class(
             data=request.data,
@@ -96,6 +104,9 @@ class AnalysisCreate(LoginRequiredMixin, APIView):
 
     renderer_classes = [TemplateHTMLRenderer]
 
+    @method_decorator(
+        permission_required("analyses.add_analysis", raise_exception=True)
+    )
     def get(self, request, format=None):
         labs = LabSerializer(Lab.objects.all(), many=True)
         samples = SampleSerializer(Sample.objects.all(), many=True)
@@ -126,6 +137,9 @@ class AnalysisDetail(LoginRequiredMixin, APIView):
         except Analysis.DoesNotExist:
             return redirect("404")
 
+    @method_decorator(
+        permission_required("analyses.view_analysis", raise_exception=True)
+    )
     def get(self, request, id, format=None):
         analysis = self.get_object(id)
         serializer = AnalysisSerializer(analysis)
@@ -133,6 +147,9 @@ class AnalysisDetail(LoginRequiredMixin, APIView):
             data={"analysis": serializer.data}, template_name="analyses/detail.html"
         )
 
+    @method_decorator(
+        permission_required("analyses.change_analysis", raise_exception=True)
+    )
     def put(self, request, id, format=None):
         analysis = self.get_object(id)
         serializer = AnalysisSerializer(analysis, data=request.data)
@@ -160,6 +177,9 @@ class AnalysisDetail(LoginRequiredMixin, APIView):
             data={"analysis": serializer.data}, template_name="analyses/detail.html"
         )
 
+    @method_decorator(
+        permission_required("analyses.delete_analysis", raise_exception=True)
+    )
     def delete(self, request, id, format=None):
         analysis = self.get_object(id)
         deleted_rows = analysis.delete()
@@ -185,6 +205,9 @@ class AnalysisEdit(LoginRequiredMixin, APIView):
         except Analysis.DoesNotExist:
             return redirect("404")
 
+    @method_decorator(
+        permission_required("analyses.change_analysis", raise_exception=True)
+    )
     def get(self, request, id, format=None):
         analysis = self.get_object(id)
         serializer = AnalysisSerializer(analysis)
