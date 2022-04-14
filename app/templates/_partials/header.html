@@ -12,11 +12,12 @@
 			href="/change-password"
 			class="flex px-5 items-center hover:cursor-pointer hover:bg-gray-100"
 		>
-			{#	TODO(fgic): Auth #}
-			{% component "user-circle" name="Jožko" %}
-			<span class="pl-3 text-gray-900">
-				Jožko Gregor
-            </span>
+            {% with username=user.name %}
+                {% component "user-circle" name=username %}
+                <span class="pl-3 text-gray-900">
+					{{ username }}
+				</span>
+            {% endwith %}
 		</a>
 	</div>
 </div>
