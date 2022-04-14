@@ -1,15 +1,19 @@
+from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import Group
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.utils.decorators import method_decorator
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.renderers import TemplateHTMLRenderer
 
-from .models import User, Role
+from .models import User
 from . import serializers
 
 
-class UserList(APIView):
+class UserList(LoginRequiredMixin, APIView):
     """
     List all users, or create a new user.
     """
@@ -17,6 +21,7 @@ class UserList(APIView):
     serializer_class = serializers.UserSerializer
     renderer_classes = [TemplateHTMLRenderer]
 
+    @method_decorator(permission_required("users.view_user", raise_exception=True))
     def get(self, request, format=None):
         users = User.objects.all()
         serializer = self.serializer_class(users, many=True)
@@ -28,12 +33,8 @@ class UserList(APIView):
             },
             "header": {
                 "items": [
-                    {"name": "názov", "key": "name"},
-                    {"name": "používateľ", "key": "login"},
-                    {
-                        "name": "dátum",
-                        "key": "created_at",
-                    },
+                    {"name": "meno", "key": "name"},
+                    {"name": "e-mail", "key": "email"},
                 ]
             },
             "layout": [
@@ -46,17 +47,16 @@ class UserList(APIView):
             template_name="users/index.html",
         )
 
+    @method_decorator(permission_required("users.add_user", raise_exception=True))
     def post(self, request, format=None):
         serializer = self.serializer_class(data=request.data)
 
         if not serializer.is_valid():
-            roles = serializers.RoleSerializer(Role.objects.all(), many=True)
             messages.add_message(
                 request, messages.ERROR, "Nepodarilo sa uložiť používateľa"
             )
             return Response(
                 data={
-                    "roles": roles.data,
                     "errors": serializer.errors,
                 },
                 status=status.HTTP_400_BAD_REQUEST,
@@ -68,23 +68,24 @@ class UserList(APIView):
         return redirect("user-list")
 
 
-class UserCreate(APIView):
+class UserCreate(LoginRequiredMixin, APIView):
     """
     Create new user
     """
 
     renderer_classes = [TemplateHTMLRenderer]
 
+    @method_decorator(permission_required("users.add_user", raise_exception=True))
     def get(self, request, format=None):
-        roles = serializers.RoleSerializer(Role.objects.all(), many=True)
+        groups = serializers.GroupSerializer(Group.objects.all(), many=True)
 
         return Response(
-            data={"roles": roles.data},
+            data={"groups": groups.data},
             template_name="users/create.html",
         )
 
 
-class UserDetail(APIView):
+class UserDetail(LoginRequiredMixin, APIView):
     """
     User detail
     """
@@ -97,6 +98,7 @@ class UserDetail(APIView):
         except User.DoesNotExist:
             return redirect("404")
 
+    @method_decorator(permission_required("users.view_user", raise_exception=True))
     def get(self, request, id, format=None):
         user = self.get_object(id)
         serializer = serializers.UserSerializer(user)
@@ -104,6 +106,7 @@ class UserDetail(APIView):
             data={"user": serializer.data}, template_name="users/detail.html"
         )
 
+    @method_decorator(permission_required("users.change_user", raise_exception=True))
     def put(self, request, id, format=None):
         user = self.get_object(id)
         serializer = serializers.UserSerializer(user, data=request.data)
@@ -125,6 +128,7 @@ class UserDetail(APIView):
             data={"user": serializer.data}, template_name="users/detail.html"
         )
 
+    @method_decorator(permission_required("users.delete_user", raise_exception=True))
     def delete(self, request, id, format=None):
         user = self.get_object(id)
         deleted_rows = user.delete()
@@ -137,7 +141,7 @@ class UserDetail(APIView):
         return redirect("user-list")
 
 
-class UserEdit(APIView):
+class UserEdit(LoginRequiredMixin, APIView):
     """
     user edit
     """
@@ -150,15 +154,16 @@ class UserEdit(APIView):
         except User.DoesNotExist:
             return redirect("404")
 
+    @method_decorator(permission_required("users.change_user", raise_exception=True))
     def get(self, request, id, format=None):
         user = self.get_object(id)
         serializer = serializers.UserSerializer(user)
-        roles = serializers.RoleSerializer(Role.objects.all(), many=True)
+        groups = serializers.GroupSerializer(Group.objects.all(), many=True)
 
         return Response(
             data={
-                "roles": roles.data,
                 "user": serializer.data,
+                "groups": groups.data,
             },
             template_name="users/edit.html",
         )

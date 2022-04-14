@@ -42,6 +42,8 @@ SECRET_KEY = require_env("DJANGO_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = require_env("DEBUG")
 
+DEBUG_PROPAGATE_EXCEPTIONS = True
+
 ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
 # Application definition
@@ -70,7 +72,8 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
+    # "django.middleware.csrf.CsrfViewMiddleware",
+    "app.middleware.DisableCSRFMiddleware",  # TODO (fgic): Enable CSRF
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -153,6 +156,9 @@ STATIC_URL = "static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
 AUTH_USER_MODEL = "users.User"
+AUTHENTICATION_BACKENDS = ["users.backends.AuthenticationBackend"]
+LOGIN_URL = "/login"
+LOGIN_REDIRECT_URL = "/"
 
 APP = {
     "AUTHOR": require_env("APP_NAME"),

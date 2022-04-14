@@ -23,13 +23,13 @@ def navigation():
                     "path": "/grants",
                     "icon": "fas fa-file-invoice-dollar",
                     "title": "Granty",
-                    "gates": ["garant", "admin"],
+                    "groups": ["admin"],
                 },
             ],
         },
         {
             "title": "Administrácia",
-            "gates": ["admin"],
+            "groups": ["admin"],
             "items": [
                 {
                     "path": "/users",

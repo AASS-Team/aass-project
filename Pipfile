@@ -9,6 +9,8 @@ seed = "python manage.py seed app --number=10"
 loaddata = "python manage.py loaddata initial_data -v 3"
 reset = "python manage.py reset_db --noinput -c"
 flush = "python manage.py flush --noinput"
+makemigrations = "python manage.py makemigrations"
+shell = "python manage.py shell"
 test = "python manage.py test"
 lint = "black . --check --diff"
 

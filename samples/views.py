@@ -1,5 +1,8 @@
+from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.utils.decorators import method_decorator
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -11,7 +14,7 @@ from grants.models import Grant
 from users.models import User
 
 
-class SampleList(APIView):
+class SampleList(LoginRequiredMixin, APIView):
     """
     List all samples, or create a new sample.
     """
@@ -19,6 +22,7 @@ class SampleList(APIView):
     serializer_class = serializers.SampleSerializer
     renderer_classes = [TemplateHTMLRenderer]
 
+    @method_decorator(permission_required("samples.view_sample", raise_exception=True))
     def get(self, request, format=None):
         samples = Sample.objects.all()
         serializer = self.serializer_class(samples, many=True)
@@ -48,6 +52,7 @@ class SampleList(APIView):
             template_name="samples/index.html",
         )
 
+    @method_decorator(permission_required("samples.add_sample", raise_exception=True))
     def post(self, request, format=None):
         serializer = self.serializer_class(data=request.data)
 
@@ -71,13 +76,14 @@ class SampleList(APIView):
         return redirect("sample-list")
 
 
-class SampleCreate(APIView):
+class SampleCreate(LoginRequiredMixin, APIView):
     """
     Create new sample
     """
 
     renderer_classes = [TemplateHTMLRenderer]
 
+    @method_decorator(permission_required("samples.add_sample", raise_exception=True))
     def get(self, request, format=None):
         users = serializers.UserSerializer(User.objects.all(), many=True)
         grants = serializers.GrantSerializer(Grant.objects.all(), many=True)
@@ -88,7 +94,7 @@ class SampleCreate(APIView):
         )
 
 
-class SampleDetail(APIView):
+class SampleDetail(LoginRequiredMixin, APIView):
     """
     Sample detail
     """
@@ -101,6 +107,7 @@ class SampleDetail(APIView):
         except Sample.DoesNotExist:
             return redirect("404")
 
+    @method_decorator(permission_required("samples.view_sample", raise_exception=True))
     def get(self, request, id, format=None):
         sample = self.get_object(id)
         serializer = serializers.SampleSerializer(sample)
@@ -108,6 +115,9 @@ class SampleDetail(APIView):
             data={"sample": serializer.data}, template_name="samples/detail.html"
         )
 
+    @method_decorator(
+        permission_required("samples.change_sample", raise_exception=True)
+    )
     def put(self, request, id, format=None):
         sample = self.get_object(id)
         serializer = serializers.SampleSerializer(sample, data=request.data)
@@ -132,6 +142,9 @@ class SampleDetail(APIView):
             data={"sample": serializer.data}, template_name="samples/detail.html"
         )
 
+    @method_decorator(
+        permission_required("samples.delete_sample", raise_exception=True)
+    )
     def delete(self, request, id, format=None):
         sample = self.get_object(id)
         deleted_rows = sample.delete()
@@ -144,7 +157,7 @@ class SampleDetail(APIView):
         return redirect("sample-list")
 
 
-class SampleEdit(APIView):
+class SampleEdit(LoginRequiredMixin, APIView):
     """
     Sample edit
     """
@@ -157,6 +170,9 @@ class SampleEdit(APIView):
         except Sample.DoesNotExist:
             return redirect("404")
 
+    @method_decorator(
+        permission_required("samples.change_sample", raise_exception=True)
+    )
     def get(self, request, id, format=None):
         sample = self.get_object(id)
         serializer = serializers.SampleSerializer(sample)

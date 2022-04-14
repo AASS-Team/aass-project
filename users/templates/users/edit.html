@@ -12,15 +12,6 @@
 				{% csrf_token %}
 				{% method_override 'PUT' %}
 
-				{# username #}
-				{% component_block 'ui-label' key="username" label_for="username" center=True %}
-					{% slot content %}
-						{% obj_get request.POST 'username' as old_value %}
-						{% firstof old_value user.username as value %}
-						{% component 'ui-input' name="username" type="text" additional_classes="text-gray-700" required=True value=value errors=errors%}
-					{% endslot %}
-				{% endcomponent_block %}
-
 				{# meno #}
 				{% component_block 'ui-label' key="meno" label_for="first_name" center=True %}
 					{% slot content %}
@@ -39,6 +30,15 @@
 					{% endslot %}
 				{% endcomponent_block %}
 
+                {# email #}
+                {% component_block 'ui-label' key="e-mail" label_for="email" center=True %}
+                    {% slot content %}
+                        {% obj_get request.POST 'email' as old_value %}
+                        {% firstof old_value user.email as value %}
+                        {% component 'ui-input' name="email" type="email" additional_classes="text-gray-700" required=True value=value errors=errors%}
+                    {% endslot %}
+                {% endcomponent_block %}
+
 				{# heslo #}
 				{% component_block 'ui-label' key="heslo" label_for="password" center=True %}
 					{% slot content %}
@@ -49,9 +49,9 @@
 				{% endcomponent_block %}
 
 				{# rola #}
-				{% component_block 'ui-label' key="rola" label_for="role" center=True %}
+				{% component_block 'ui-label' key="rola" label_for="groups" center=True %}
 					{% slot content %}
-						{% component 'ui-select' name="role" items=roles additional_classes="text-gray-700 w-1/4" required=True errors=errors selected=user.role.id %}
+						{% component 'ui-select' name="groups" items=groups additional_classes="text-gray-700 w-1/4" required=True errors=errors selected=user.groups.0.id %}
 					{% endslot %}
 				{% endcomponent_block %}
 

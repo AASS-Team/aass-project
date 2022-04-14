@@ -1,0 +1,92 @@
+{% extends 'index.html' %}
+
+{% load static %}
+
+{% block title %}Prihlásenie{% endblock %}
+
+{% block app %}
+
+    <div class="h-full flex bg-gray-200">
+        <div class="fixed flex w-full shadow-lg bg-yellow-500 p-4">
+            <a href="/">
+                <img src="{% static '/img/logo-extended.png' %}" alt="STU FCHPT logo" class="w-3/4">
+            </a>
+        </div>
+
+        <div class="mx-auto flex justify-center items-center ">
+
+            <div class="w-96 bg-white rounded-lg shadow-xl p-8">
+
+                <h1 class="text-gray-800 text-3xl font-bold pt-3 text-center">Vitajte</h1>
+                <p class="text-center text-gray-700">Pokračujte prosím prihlásením sa</p>
+
+                <form method="POST" action="{% url 'login' %}" class="relative">
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                        <p
+                                class="text-red-500 absolute text-sm"
+                                style="top:-2rem"
+                        >
+                            <span>Zadali ste nesprávne meno alebo heslo.</span>
+                        </p>
+                    {% endif %}
+
+                    <div
+                            class="relative mt-16 border-2 rounded border-white
+					{% if form.username.errors or form.non_field_errors %}
+					border-2 border-red-500
+					{% endif %}
+					"
+                    >
+                        {% if form.username.errors %}
+                            <p
+                                    class="text-red-500 absolute text-xs"
+                                    style="top:-1.3rem"
+                            >
+                                <span>{{ form.username.errors.0 }}</span>
+                            </p>
+                        {% endif %}
+                        <label
+                                for="login"
+                                class="uppercase text-gray-600 text-xs font-bold absolute pl-3 pt-2"
+                        >
+                            Login
+                        </label>
+                        {% component 'ui-input' type="text" name="username" required=True autofocus="autofocus" placeholder="vasa@adresa.sk" labeled=True additional_classes="w-full" %}
+                    </div>
+
+
+
+                    <div
+                            class="relative mt-5 w-100 border-2 rounded border-white
+					{% if form.password.errors or form.non_field_errors %}
+					border-2 border-red-500
+					{% endif %}
+					"
+                    >
+                        {% if form.password.errors%}
+                            <p
+                                    class="text-red-500 absolute text-xs"
+                                    style="top:-1.3rem"
+                            >
+                                <span>{{  form.password.errors.0 }}</span>
+                            </p>
+                        {% endif %}
+                        <label
+                                for="password"
+                                class="uppercase text-gray-600 text-xs font-bold absolute pl-3 pt-2"
+                        >
+                            Heslo
+                        </label>
+                        {% component 'ui-input' type="password" name="password" required=True placeholder="*********" labeled=True additional_classes="w-full" %}
+                    </div>
+
+                    <div class="pt-8 text-center">
+                        {% component 'ui-button' text="Prihlásiť sa" type="submit" primary=True additional_classes="rounded-full mx-auto py-2 px-6" %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

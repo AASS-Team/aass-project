@@ -1,5 +1,8 @@
+from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.utils.decorators import method_decorator
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -9,7 +12,7 @@ from . import serializers
 from .models import Grant
 
 
-class GrantList(APIView):
+class GrantList(LoginRequiredMixin, APIView):
 
     """
     List all grants, or create a new grant.
@@ -18,6 +21,7 @@ class GrantList(APIView):
     serializer_class = serializers.GrantSerializer
     renderer_classes = [TemplateHTMLRenderer]
 
+    @method_decorator(permission_required("grants.view_grant", raise_exception=True))
     def get(self, request, format=None):
         grants = Grant.objects.all()
         serializer = self.serializer_class(grants, many=True)
@@ -43,6 +47,7 @@ class GrantList(APIView):
             template_name="grants/index.html",
         )
 
+    @method_decorator(permission_required("grants.add_grant", raise_exception=True))
     def post(self, request, format=None):
         serializer = self.serializer_class(data=request.data)
 
@@ -63,13 +68,14 @@ class GrantList(APIView):
         return redirect("grant-list")
 
 
-class GrantCreate(APIView):
+class GrantCreate(LoginRequiredMixin, APIView):
     """
     Create new grant
     """
 
     renderer_classes = [TemplateHTMLRenderer]
 
+    @method_decorator(permission_required("grants.add_grant", raise_exception=True))
     def get(self, request, format=None):
 
         return Response(
@@ -77,7 +83,7 @@ class GrantCreate(APIView):
         )
 
 
-class GrantDetail(APIView):
+class GrantDetail(LoginRequiredMixin, APIView):
     """
     Grant detail
     """
@@ -90,6 +96,7 @@ class GrantDetail(APIView):
         except Grant.DoesNotExist:
             return redirect("404")
 
+    @method_decorator(permission_required("grants.view_grant", raise_exception=True))
     def get(self, request, id, format=None):
         grant = self.get_object(id)
         serializer = serializers.GrantSerializer(grant)
@@ -97,6 +104,7 @@ class GrantDetail(APIView):
             data={"grant": serializer.data}, template_name="grants/detail.html"
         )
 
+    @method_decorator(permission_required("grants.change_grant", raise_exception=True))
     def put(self, request, id, format=None):
         grant = self.get_object(id)
         serializer = serializers.GrantSerializer(grant, data=request.data)
@@ -116,6 +124,7 @@ class GrantDetail(APIView):
             data={"grant": serializer.data}, template_name="grants/detail.html"
         )
 
+    @method_decorator(permission_required("grants.delete_grant", raise_exception=True))
     def delete(self, request, id, format=None):
         grant = self.get_object(id)
         deleted_rows = grant.delete()
@@ -128,7 +137,7 @@ class GrantDetail(APIView):
         return redirect("grant-list")
 
 
-class GrantEdit(APIView):
+class GrantEdit(LoginRequiredMixin, APIView):
     """
     Grant edit
     """
@@ -141,6 +150,7 @@ class GrantEdit(APIView):
         except Grant.DoesNotExist:
             return redirect("404")
 
+    @method_decorator(permission_required("grants.change_grant", raise_exception=True))
     def get(self, request, id, format=None):
         grant = self.get_object(id)
         serializer = serializers.GrantSerializer(grant)

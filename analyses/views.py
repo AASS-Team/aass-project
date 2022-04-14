@@ -1,5 +1,8 @@
+from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.utils.decorators import method_decorator
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -17,7 +20,7 @@ from labs.models import Lab
 from labs.serializers import LabSerializer
 
 
-class AnalysisList(APIView):
+class AnalysisList(LoginRequiredMixin, APIView):
     """
     List all analyses, or create a new analysis.
     """
@@ -25,6 +28,9 @@ class AnalysisList(APIView):
     serializer_class = AnalysisSerializer
     renderer_classes = [TemplateHTMLRenderer]
 
+    @method_decorator(
+        permission_required("analyses.view_analysis", raise_exception=True)
+    )
     def get(self, request, format=None):
         analyses = Analysis.objects.all()
         serializer = self.serializer_class(analyses, many=True)
@@ -56,6 +62,9 @@ class AnalysisList(APIView):
             template_name="analyses/index.html",
         )
 
+    @method_decorator(
+        permission_required("analyses.add_analysis", raise_exception=True)
+    )
     def post(self, request, format=None):
         serializer = self.serializer_class(
             data=request.data,
@@ -88,13 +97,16 @@ class AnalysisList(APIView):
 
 
 # loads data to select boxes
-class AnalysisCreate(APIView):
+class AnalysisCreate(LoginRequiredMixin, APIView):
     """
     Create new analysis
     """
 
     renderer_classes = [TemplateHTMLRenderer]
 
+    @method_decorator(
+        permission_required("analyses.add_analysis", raise_exception=True)
+    )
     def get(self, request, format=None):
         labs = LabSerializer(Lab.objects.all(), many=True)
         samples = SampleSerializer(Sample.objects.all(), many=True)
@@ -112,7 +124,7 @@ class AnalysisCreate(APIView):
         )
 
 
-class AnalysisDetail(APIView):
+class AnalysisDetail(LoginRequiredMixin, APIView):
     """
     Analysis detail
     """
@@ -125,6 +137,9 @@ class AnalysisDetail(APIView):
         except Analysis.DoesNotExist:
             return redirect("404")
 
+    @method_decorator(
+        permission_required("analyses.view_analysis", raise_exception=True)
+    )
     def get(self, request, id, format=None):
         analysis = self.get_object(id)
         serializer = AnalysisSerializer(analysis)
@@ -132,6 +147,9 @@ class AnalysisDetail(APIView):
             data={"analysis": serializer.data}, template_name="analyses/detail.html"
         )
 
+    @method_decorator(
+        permission_required("analyses.change_analysis", raise_exception=True)
+    )
     def put(self, request, id, format=None):
         analysis = self.get_object(id)
         serializer = AnalysisSerializer(analysis, data=request.data)
@@ -159,6 +177,9 @@ class AnalysisDetail(APIView):
             data={"analysis": serializer.data}, template_name="analyses/detail.html"
         )
 
+    @method_decorator(
+        permission_required("analyses.delete_analysis", raise_exception=True)
+    )
     def delete(self, request, id, format=None):
         analysis = self.get_object(id)
         deleted_rows = analysis.delete()
@@ -171,7 +192,7 @@ class AnalysisDetail(APIView):
         return redirect("analysis-list")
 
 
-class AnalysisEdit(APIView):
+class AnalysisEdit(LoginRequiredMixin, APIView):
     """
     Analysis edit
     """
@@ -184,6 +205,9 @@ class AnalysisEdit(APIView):
         except Analysis.DoesNotExist:
             return redirect("404")
 
+    @method_decorator(
+        permission_required("analyses.change_analysis", raise_exception=True)
+    )
     def get(self, request, id, format=None):
         analysis = self.get_object(id)
         serializer = AnalysisSerializer(analysis)

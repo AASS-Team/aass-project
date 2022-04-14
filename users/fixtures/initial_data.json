@@ -1,80 +1,257 @@
 [
   {
-	"model": "users.role",
-	"pk": "04fe17df-9d85-49d8-8cf7-9dc596a3dd1a",
-	"fields": {
-	  "name": "admin"
-	}
+    "model": "auth.group",
+    "pk": 1,
+    "fields": {
+      "name": "administrátor",
+      "permissions": [
+        [
+          "view_sample",
+          "samples",
+          "sample"
+        ],
+        [
+          "add_sample",
+          "samples",
+          "sample"
+        ],
+        [
+          "change_sample",
+          "samples",
+          "sample"
+        ],
+        [
+          "delete_sample",
+          "samples",
+          "sample"
+        ],
+        [
+          "view_analysis",
+          "analyses",
+          "analysis"
+        ],
+        [
+          "add_analysis",
+          "analyses",
+          "analysis"
+        ],
+        [
+          "change_analysis",
+          "analyses",
+          "analysis"
+        ],
+        [
+          "delete_analysis",
+          "analyses",
+          "analysis"
+        ],
+        [
+          "view_grant",
+          "grants",
+          "grant"
+        ],
+        [
+          "add_grant",
+          "grants",
+          "grant"
+        ],
+        [
+          "change_grant",
+          "grants",
+          "grant"
+        ],
+        [
+          "delete_grant",
+          "grants",
+          "grant"
+        ],
+        [
+          "view_user",
+          "users",
+          "user"
+        ],
+        [
+          "add_user",
+          "users",
+          "user"
+        ],
+        [
+          "change_user",
+          "users",
+          "user"
+        ],
+        [
+          "delete_user",
+          "users",
+          "user"
+        ],
+        [
+          "view_lab",
+          "labs",
+          "lab"
+        ],
+        [
+          "add_lab",
+          "labs",
+          "lab"
+        ],
+        [
+          "change_lab",
+          "labs",
+          "lab"
+        ],
+        [
+          "delete_lab",
+          "labs",
+          "lab"
+        ],
+        [
+          "add_tool",
+          "tools",
+          "tool"
+        ],
+        [
+          "change_tool",
+          "tools",
+          "tool"
+        ],
+        [
+          "delete_tool",
+          "tools",
+          "tool"
+        ],
+        [
+          "view_tool",
+          "tools",
+          "tool"
+        ]
+      ]
+    }
   },
   {
-	"model": "users.role",
-	"pk": "27972876-abfb-4890-8ec2-5aa25206f08a",
-	"fields": {
-	  "name": "laborant"
-	}
+    "model": "auth.group",
+    "pk": 2,
+    "fields": {
+      "name": "laborant",
+      "permissions": [
+        [
+          "view_sample",
+          "samples",
+          "sample"
+        ],
+        [
+          "add_sample",
+          "samples",
+          "sample"
+        ],
+        [
+          "change_sample",
+          "samples",
+          "sample"
+        ],
+        [
+          "delete_sample",
+          "samples",
+          "sample"
+        ],
+        [
+          "add_analysis",
+          "analyses",
+          "analysis"
+        ],
+        [
+          "change_analysis",
+          "analyses",
+          "analysis"
+        ],
+        [
+          "delete_analysis",
+          "analyses",
+          "analysis"
+        ],
+        [
+          "view_analysis",
+          "analyses",
+          "analysis"
+        ],
+        [
+          "view_grant",
+          "grants",
+          "grant"
+        ]
+      ]
+    }
   },
   {
-	"model": "users.role",
-	"pk": "722ca7d6-5ea7-4f07-9bc2-582c2efb8169",
-	"fields": {
-	  "name": "user"
-	}
+    "model": "auth.group",
+    "pk": 3,
+    "fields": {
+      "name": "používateľ",
+      "permissions": [
+        [
+          "view_analysis",
+          "analyses",
+          "analysis"
+        ],
+        [
+          "view_grant",
+          "grants",
+          "grant"
+        ],
+        [
+          "view_sample",
+          "samples",
+          "sample"
+        ]
+      ]
+    }
   },
   {
-	"model": "users.user",
-	"pk": "1f0b2132-80a8-4b98-8cd3-bae9a588078b",
-	"fields": {
-	  "first_name": "Admin",
-	  "last_name": "Administratívny",
-	  "username": "admin",
-	  "email": "admin@admin.sk",
-	  "password": "nbusr123",
-	  "last_login": "2007-01-04T05:39:21Z",
-	  "is_superuser": false,
-	  "is_staff": false,
-	  "is_active": true,
-	  "date_joined": "2022-04-09T20:51:56.402Z",
-	  "role": "04fe17df-9d85-49d8-8cf7-9dc596a3dd1a",
-	  "groups": [],
-	  "user_permissions": []
-	}
+    "model": "users.user",
+    "pk": "953a54c8-3320-43a7-8eb8-c9381b635af8",
+    "fields": {
+      "password": "pbkdf2_sha256$320000$vhrjm4fswn5hWKf8RwZBIz$PlCD9tvyl/YkEstMbgLLOln4hQVi63HD+f3V+2DKBPE=",
+      "last_login": null,
+      "is_superuser": true,
+      "first_name": "Admin",
+      "last_name": "Administratívny",
+      "email": "admin@test.sk",
+      "groups": [
+        1
+      ],
+      "user_permissions": []
+    }
   },
   {
-	"model": "users.user",
-	"pk": "1f0b2132-80a8-4b98-8cd3-bae9a588078b",
-	"fields": {
-	  "first_name": "Laborant",
-	  "last_name": "Laboratívny",
-	  "username": "laborant",
-	  "email": "laborant@laborant.sk",
-	  "password": "nbusr123",
-	  "last_login": "2007-01-04T05:39:21Z",
-	  "is_superuser": false,
-	  "is_staff": false,
-	  "is_active": true,
-	  "date_joined": "2022-04-09T20:51:56.402Z",
-	  "role": "27972876-abfb-4890-8ec2-5aa25206f08a",
-	  "groups": [],
-	  "user_permissions": []
-	}
+    "model": "users.user",
+    "pk": "f7d9caf4-9101-4fe5-859a-f286272640a3",
+    "fields": {
+      "password": "pbkdf2_sha256$320000$yHiD8loC9hSnlpVFDDpUCv$9EPrtY4zY5Op5REm5UbryrySE2cNx1gcE30Om6/ME8E=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "Laborant",
+      "last_name": "Laboratórny",
+      "email": "laborant@test.sk",
+      "groups": [
+        2
+      ],
+      "user_permissions": []
+    }
   },
   {
-	"model": "users.user",
-	"pk": "4386280d-00d4-4677-a2c5-a68c66ec6825",
-	"fields": {
-	  "first_name": "Používateľ",
-	  "last_name": "Použitý",
-	  "password": "nbusr123",
-	  "username": "user",
-	  "email": "user@user.sk",
-	  "last_login": "1970-01-01T04:51:49Z",
-	  "is_superuser": false,
-	  "is_staff": false,
-	  "is_active": true,
-	  "date_joined": "2022-04-09T20:51:56.402Z",
-	  "role": "722ca7d6-5ea7-4f07-9bc2-582c2efb8169",
-	  "groups": [],
-	  "user_permissions": []
-	}
+    "model": "users.user",
+    "pk": "4386280d-00d4-4677-a2c5-a68c66ec6825",
+    "fields": {
+      "password": "pbkdf2_sha256$320000$5BA8Mc38ryTaDklFyTJuDz$SDLzFzBc9z+KK9Ks3enclbPvvPHHJ6prGiyMbVaPCjo=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "Používateľ",
+      "last_name": "Použitý",
+      "email": "user@test.sk",
+      "groups": [
+        3
+      ],
+      "user_permissions": []
+    }
   }
 ]

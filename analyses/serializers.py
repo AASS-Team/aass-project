@@ -1,10 +1,11 @@
 from rest_framework import serializers
 
 from .models import Analysis
-from samples.models import User, Sample
+from samples.models import Sample
 from samples.serializers import (
     SampleSerializer,
 )
+from users.models import User
 from users.serializers import UserSerializer
 from labs.models import Lab
 from labs.serializers import LabSerializer
