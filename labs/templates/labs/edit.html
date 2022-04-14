@@ -9,7 +9,6 @@
 {% block content %}
 	<div class="bg-white rounded-lg">
 		<div class="p-4 pl-6">
-        {{  lab.id }}
             <form action="{% url 'lab-detail' lab.id %}" method="POST">
 				{% csrf_token %}
 				{% method_override 'PUT' %}

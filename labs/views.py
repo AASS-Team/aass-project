@@ -57,7 +57,6 @@ class LabsList(APIView):
             messages.add_message(
                 request, messages.ERROR, "Nepodarilo sa uložiť laboratórium"
             )
-            labs
             return Response(
                 data={
                     "labs": labs.data,
