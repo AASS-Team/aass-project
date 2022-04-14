@@ -4,7 +4,7 @@ from . import views
 
 urlpatterns = [
     path(
-        "labs/",
+        "administration/labs/",
         include(
             [
                 path("", views.LabsList.as_view(), name="lab-list"),
