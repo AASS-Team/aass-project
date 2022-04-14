@@ -1,0 +1,48 @@
+{% extends 'app.html' %}
+
+{% load component_tags %}
+{% load method_override %}
+
+{% block title %}{{ lab.name }}{% endblock %}
+
+{% block content %}
+	<div class="bg-white rounded-lg">
+		<div class="p-4 pl-6">
+			<h1 class="text-2xl mb-10">
+				{{ lab.name }}
+			</h1>
+
+            {# názov #}
+            {% component_block 'ui-label' key="Názov" center=True %}
+                {% slot content %}
+                    <p>
+                        {{ lab.name}}
+                    </p>
+                {% endslot %}
+            {% endcomponent_block %}
+
+            {# adresa #}
+            {% component_block 'ui-label' key="Adresa" center=True %}
+                {% slot content %}
+                    <p>
+                        {{ lab.address}}
+                    </p>
+                {% endslot %}
+            {% endcomponent_block %}
+
+			<div class="flex flex-row justify-end mt-5">
+				{% url 'lab-edit' lab.id as lab_edit_url %}
+				{% component 'ui-button' additional_classes="rounded-full ml-3" text="Upraviť laboratórium" primary=True type="link" href=lab_edit_url %}
+
+				{# TODO #}
+				{# if not used #}
+				{# @can('admin')#}
+				<form action="{% url 'lab-detail' lab.id %}" method="POST">
+					{% csrf_token %}
+					{% method_override 'DELETE' %}
+					{% component 'ui-button' additional_classes="rounded-full ml-3" text="Vymazať laboratórium" danger=True type="submit" %}
+				</form>
+			</div>
+		</div>
+	</div>
+{% endblock %}

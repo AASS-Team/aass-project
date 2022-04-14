@@ -1,0 +1,41 @@
+{% extends 'app.html' %}
+
+{% block title %}Správa laboratórií{% endblock %}
+
+{% block content %}
+<h1 class="text-2xl mb-3">Správa laboratórií</h1>
+
+<div class="flex flex-row">
+
+
+    {# Nástroje #}
+    <a
+        href="{% url 'tool-list' %}"
+        class="mb-5 mr-5"
+    >
+        <div class="flex flex-col bg-white h-64 w-64 pt-12 items-center group">
+            <i class="fas fa-eye-dropper fa-2x text-gray-600 group-hover:text-yellow-500"></i>
+            <p class="text-xl mt-8">
+                Nástroje
+            </p>
+            <p class="text-gray-600 mt-2 px-5 text-center">
+                Pridávajte, upravujte dostupné nástroje
+            </p>
+        </div>
+    </a>
+
+
+    {# Laboratóriá #}
+    <a href="{% url  'lab-list' %}">
+        <div class="flex flex-col bg-white h-64 w-64 pt-12 items-center group">
+            <i class="fas fa-warehouse fa-2x text-gray-600 group-hover:text-yellow-500"></i>
+            <p class="text-xl mt-8">
+                Laboratóriá
+            </p>
+            <p class="text-gray-600 mt-2 px-5 text-center">
+                Spravujte názvy a adresy laboratórií
+            </p>
+        </div>
+    </a>
+</div>
+{% endblock %}
