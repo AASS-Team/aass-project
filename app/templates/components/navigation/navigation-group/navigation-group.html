@@ -1,12 +1,15 @@
-{# TODO(fgic): Roles #}
-{#@if(!isset($group['gates']) || (isset($group['gates']) && Gate::any($group['gates'])))#}
+{% load has_group %}
+
+{% if 'groups' not in group or request.user|has_group:group.groups %}
 <div class="mt-10">
 	<p class="uppercase text-sm text-gray-500 font-bold mb-2 pl-6">
 		{{ group.title}}
 	</p>
 
 	{% for item in group.items %}
-		{#	@if(!isset($item['gates']) || (isset($item['gates']) && Gate::any($item['gates'])))#}
-		{% component "navigation-item" item=item %}
+        {% if 'groups' not in item or request.user|has_group:item.groups %}
+		    {% component "navigation-item" item=item %}
+        {% endif %}
 	{% endfor %}
 </div>
+{% endif %}
