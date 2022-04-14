@@ -11,3 +11,8 @@ def server_error_view(request):
 
 def permission_denied_view(request, exception):
     return render(request, "403.html", status=403)
+
+
+def csrf_failure(request, reason=""):
+    ctx = {"reason": reason}
+    return render("403_csrf.html", ctx)

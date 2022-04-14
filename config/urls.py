@@ -16,10 +16,6 @@ Including another URLconf
 from django.urls import include, path
 from django.views.generic import RedirectView
 
-handler404 = "config.views.page_not_found_view"
-handler500 = "config.views.server_error_view"
-handler403 = "config.views.permission_denied_view"
-
 urlpatterns = [
     path("", RedirectView.as_view(url="samples", permanent=False)),
     path("", include("app.urls")),
