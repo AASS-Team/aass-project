@@ -1,5 +1,6 @@
+from django.contrib.auth.models import Group
 from rest_framework import serializers
-from .models import User, Role
+from .models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -8,14 +9,14 @@ class UserSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     name = serializers.ReadOnlyField()
-    role = serializers.PrimaryKeyRelatedField(queryset=Role.objects.all())
+    groups = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all(), many=True)
 
     def to_representation(self, instance):
-        self.fields["role"] = RoleSerializer()
+        self.fields["groups"] = GroupSerializer(many=True)
         return super(UserSerializer, self).to_representation(instance)
 
 
-class RoleSerializer(serializers.ModelSerializer):
+class GroupSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Role
-        fields = "__all__"
+        model = Group
+        fields = ["id", "name"]

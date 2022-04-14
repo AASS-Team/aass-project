@@ -12,12 +12,10 @@
 			href="/change-password"
 			class="flex px-5 items-center hover:cursor-pointer hover:bg-gray-100"
 		>
-            {% with username=user.name %}
-                {% component "user-circle" name=username %}
+                {% component "user-circle" name=request.user.name %}
                 <span class="pl-3 text-gray-900">
-					{{ username }}
+					{{ request.user.name }}
 				</span>
-            {% endwith %}
 		</a>
 	</div>
 </div>

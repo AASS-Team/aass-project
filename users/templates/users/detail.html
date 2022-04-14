@@ -8,15 +8,6 @@
 	<div class="bg-white rounded-lg">
 		<div class="p-4 pl-6">
 
-			{# username #}
-			{% component_block 'ui-label' key="username" center=True %}
-				{% slot content %}
-					<p>
-						{{ user.username }}
-					</p>
-				{% endslot %}
-			{% endcomponent_block %}
-
 			{# meno #}
 			{% component_block 'ui-label' key="meno" center=True %}
 				{% slot content %}
@@ -35,11 +26,20 @@
 				{% endslot %}
 			{% endcomponent_block %}
 
+            {# email #}
+            {% component_block 'ui-label' key="e-mail" center=True %}
+                {% slot content %}
+                    <p>
+                        {{ user.email }}
+                    </p>
+                {% endslot %}
+            {% endcomponent_block %}
+
 			{# rola #}
 			{% component_block 'ui-label' key="rola" center=True %}
 				{% slot content %}
 					<p>
-						{{ user.role.name }}
+                        {{ user.groups.0.name }}
 					</p>
 				{% endslot %}
 			{% endcomponent_block %}

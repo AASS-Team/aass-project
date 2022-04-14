@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import Group
 from django.shortcuts import redirect
 from django.contrib import messages
 from rest_framework import status
@@ -6,7 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.renderers import TemplateHTMLRenderer
 
-from .models import User, Role
+from .models import User
 from . import serializers
 
 
@@ -29,12 +30,8 @@ class UserList(LoginRequiredMixin, APIView):
             },
             "header": {
                 "items": [
-                    {"name": "názov", "key": "name"},
-                    {"name": "používateľ", "key": "login"},
-                    {
-                        "name": "dátum",
-                        "key": "created_at",
-                    },
+                    {"name": "meno", "key": "name"},
+                    {"name": "e-mail", "key": "email"},
                 ]
             },
             "layout": [
@@ -51,13 +48,11 @@ class UserList(LoginRequiredMixin, APIView):
         serializer = self.serializer_class(data=request.data)
 
         if not serializer.is_valid():
-            roles = serializers.RoleSerializer(Role.objects.all(), many=True)
             messages.add_message(
                 request, messages.ERROR, "Nepodarilo sa uložiť používateľa"
             )
             return Response(
                 data={
-                    "roles": roles.data,
                     "errors": serializer.errors,
                 },
                 status=status.HTTP_400_BAD_REQUEST,
@@ -77,10 +72,10 @@ class UserCreate(LoginRequiredMixin, APIView):
     renderer_classes = [TemplateHTMLRenderer]
 
     def get(self, request, format=None):
-        roles = serializers.RoleSerializer(Role.objects.all(), many=True)
+        groups = serializers.GroupSerializer(Group.objects.all(), many=True)
 
         return Response(
-            data={"roles": roles.data},
+            data={"groups": groups.data},
             template_name="users/create.html",
         )
 
@@ -154,12 +149,12 @@ class UserEdit(LoginRequiredMixin, APIView):
     def get(self, request, id, format=None):
         user = self.get_object(id)
         serializer = serializers.UserSerializer(user)
-        roles = serializers.RoleSerializer(Role.objects.all(), many=True)
+        groups = serializers.GroupSerializer(Group.objects.all(), many=True)
 
         return Response(
             data={
-                "roles": roles.data,
                 "user": serializer.data,
+                "groups": groups.data,
             },
             template_name="users/edit.html",
         )
