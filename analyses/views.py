@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.contrib import messages
 from rest_framework import status
@@ -17,7 +18,7 @@ from labs.models import Lab
 from labs.serializers import LabSerializer
 
 
-class AnalysisList(APIView):
+class AnalysisList(LoginRequiredMixin, APIView):
     """
     List all analyses, or create a new analysis.
     """
@@ -88,7 +89,7 @@ class AnalysisList(APIView):
 
 
 # loads data to select boxes
-class AnalysisCreate(APIView):
+class AnalysisCreate(LoginRequiredMixin, APIView):
     """
     Create new analysis
     """
@@ -112,7 +113,7 @@ class AnalysisCreate(APIView):
         )
 
 
-class AnalysisDetail(APIView):
+class AnalysisDetail(LoginRequiredMixin, APIView):
     """
     Analysis detail
     """
@@ -171,7 +172,7 @@ class AnalysisDetail(APIView):
         return redirect("analysis-list")
 
 
-class AnalysisEdit(APIView):
+class AnalysisEdit(LoginRequiredMixin, APIView):
     """
     Analysis edit
     """

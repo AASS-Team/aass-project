@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.contrib import messages
 from rest_framework import status
@@ -9,7 +10,7 @@ from .models import User, Role
 from . import serializers
 
 
-class UserList(APIView):
+class UserList(LoginRequiredMixin, APIView):
     """
     List all users, or create a new user.
     """
@@ -68,7 +69,7 @@ class UserList(APIView):
         return redirect("user-list")
 
 
-class UserCreate(APIView):
+class UserCreate(LoginRequiredMixin, APIView):
     """
     Create new user
     """
@@ -84,7 +85,7 @@ class UserCreate(APIView):
         )
 
 
-class UserDetail(APIView):
+class UserDetail(LoginRequiredMixin, APIView):
     """
     User detail
     """
@@ -137,7 +138,7 @@ class UserDetail(APIView):
         return redirect("user-list")
 
 
-class UserEdit(APIView):
+class UserEdit(LoginRequiredMixin, APIView):
     """
     user edit
     """

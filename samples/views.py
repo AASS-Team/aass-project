@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.contrib import messages
 from rest_framework import status
@@ -11,7 +12,7 @@ from grants.models import Grant
 from users.models import User
 
 
-class SampleList(APIView):
+class SampleList(LoginRequiredMixin, APIView):
     """
     List all samples, or create a new sample.
     """
@@ -71,7 +72,7 @@ class SampleList(APIView):
         return redirect("sample-list")
 
 
-class SampleCreate(APIView):
+class SampleCreate(LoginRequiredMixin, APIView):
     """
     Create new sample
     """
@@ -88,7 +89,7 @@ class SampleCreate(APIView):
         )
 
 
-class SampleDetail(APIView):
+class SampleDetail(LoginRequiredMixin, APIView):
     """
     Sample detail
     """
@@ -144,7 +145,7 @@ class SampleDetail(APIView):
         return redirect("sample-list")
 
 
-class SampleEdit(APIView):
+class SampleEdit(LoginRequiredMixin, APIView):
     """
     Sample edit
     """

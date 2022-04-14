@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.contrib import messages
 from rest_framework import status
@@ -9,7 +10,7 @@ from . import serializers
 from .models import Grant
 
 
-class GrantList(APIView):
+class GrantList(LoginRequiredMixin, APIView):
 
     """
     List all grants, or create a new grant.
@@ -63,7 +64,7 @@ class GrantList(APIView):
         return redirect("grant-list")
 
 
-class GrantCreate(APIView):
+class GrantCreate(LoginRequiredMixin, APIView):
     """
     Create new grant
     """
@@ -77,7 +78,7 @@ class GrantCreate(APIView):
         )
 
 
-class GrantDetail(APIView):
+class GrantDetail(LoginRequiredMixin, APIView):
     """
     Grant detail
     """
@@ -128,7 +129,7 @@ class GrantDetail(APIView):
         return redirect("grant-list")
 
 
-class GrantEdit(APIView):
+class GrantEdit(LoginRequiredMixin, APIView):
     """
     Grant edit
     """
