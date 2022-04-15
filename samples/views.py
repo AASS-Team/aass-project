@@ -117,7 +117,9 @@ class SampleDetail(LoginRequiredMixin, APIView):
         sample = self.get_object(id)
 
         if (
-            not request.user.groups.filter(name__in=["administrátor", "laborant"]).exists()
+            not request.user.groups.filter(
+                name__in=["administrátor", "laborant"]
+            ).exists()
             and request.user.id != sample.user.id
         ):
             raise PermissionDenied()

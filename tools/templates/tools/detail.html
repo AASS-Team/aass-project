@@ -35,8 +35,6 @@
                 {% url 'tool-edit' tool.id as tool_edit_url %}
                 {% component 'ui-button' additional_classes="rounded-full ml-3" text="Upraviť nástroj" primary=True type="link" href=tool_edit_url %}
 
-                {# TODO #}
-                {# @can('admin')#}
                 <form action="{% url 'tool-detail' tool.id %}" method="POST">
                     {% csrf_token %}
                     {% method_override 'DELETE' %}

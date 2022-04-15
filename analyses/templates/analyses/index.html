@@ -1,5 +1,6 @@
 {% extends 'app.html' %}
 
+{% load has_permission %}
 {% load get_table_row_class %}
 {% load map_status %}
 
@@ -40,7 +41,9 @@
 				{% component 'ui-search' additional_classes="shadow-sm border mr-3" value=request.GET.search extendable="True" %}
 			</form>
 
-			{% component 'ui-button' icon="fas fa-plus" additional_classes="rounded-full" text="Pridať analýzu" type="link" href='new' primary=True %}
+            {% if request.user|has_permission:'analyses.add_analysis' %}
+                {% component 'ui-button' icon="fas fa-plus" additional_classes="rounded-full" text="Pridať analýzu" type="link" href='new' primary=True %}
+            {% endif %}
 		</div>
 	</div>
 

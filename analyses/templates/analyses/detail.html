@@ -1,5 +1,7 @@
 {% extends 'app.html' %}
 
+{% load has_permission %}
+{% load has_group %}
 {% load method_override %}
 {% load map_status %}
 
@@ -27,70 +29,78 @@
                     <div class="relative flex items-center">
                         {% component 'status-icon' status=analysis.status style="position:absolute; left:-1em;" %}
                         {{ analysis.status | map_status }}
-                        <span
-                                class="ml-1"
-                        >
+                        {% if request.user|has_group:'admin' %}
                             (<a
-                                class="text-blue-600 hover:underline"
-                                href="{% url 'user-detail' analysis.laborant.id %}"
-                                >
+                                    class="text-blue-600 hover:underline"
+                                    href="{% url 'user-detail' analysis.laborant.id %}"
+                            >
                                 {{ analysis.laborant.name }}
-                          </a>)
-                        </span>
+                            </a>)
+                        {% endif %}
                     </div>
                 {% endslot %}
             {% endcomponent_block %}
 
 			{# lab #}
 			{% component_block 'ui-label' key="laboratórium" center=True %}
-				{% slot content %}
-					{# TODO #}
-					{# @can('admin') #}
-					{# <a #}
-					{#	class="text-blue-600 hover:underline"#}
-					{#	href="{{ url('/users',$sample->user->id) }}"#}
-					{#	>#}
-					{#	{{ $sample->user->login }}#}
-					{#	</a>#}
-					<p>
-						{{ analysis.lab.name }}
-					</p>
-				{% endslot %}
+                {% slot content %}
+                    {% if request.user|has_group:'admin' %}
+                        <a
+                            class="text-blue-600 hover:underline"
+                            href="{% url 'lab-detail' analysis.lab.id %}"
+                        >
+                            {{ analysis.lab.name|truncatewords:5 }}
+                        </a>
+                    {% else %}
+                        <p>
+                            {{ analysis.lab.name|truncatewords:5 }}
+                        </p>
+                    {% endif %}
+                {% endslot %}
 			{% endcomponent_block %}
 
 			{# naradie #}
-			{% component_block 'ui-label' key="náradie" center=True %}
+			{% component_block 'ui-label' key="náradie" %}
 				{% slot content %}
-					{# TODO #}
-					{# @can('admin') #}
-					{# <a #}
-					{#	class="text-blue-600 hover:underline"#}
-					{#	href="{{ url('/users',$sample->user->id) }}"#}
-					{#	>#}
-					{#	{{ $sample->user->login }}#}
-					{#	</a>#}
-					<p>
-						{{ analysis.tools.0.name }}
-					</p>
+                    <ul>
+                    {% for tool in analysis.tools %}
+                        <li>
+                        {% if request.user|has_group:'admin' %}
+                            <a
+                                class="text-blue-600 hover:underline"
+                                href="{% url 'tool-detail' tool.id %}"
+                            >
+                                {{ tool.name|truncatewords:5 }}
+                            </a>
+                        {% else %}
+                            <p>
+                                {{ tool.name|truncatewords:5 }}
+                            </p>
+                        {% endif %}
+                        </li>
+                    {% endfor %}
+                    </ul>
 				{% endslot %}
 			{% endcomponent_block %}
 
-			{#	TODO struktura #}
+			{#	TODO: struktura #}
+            {% if analysis.structure %}
+            {% endif %}
 
-			{# TODO #}
-			{# @can('laborant')#}
 			<div class="flex flex-row justify-end mt-5">
 
-				{% url 'analysis-edit' analysis.id as analysis_edit_url %}
+                {% if request.user|has_permission:'analyses.change_analysis' %}
+                {% url 'analysis-edit' analysis.id as analysis_edit_url %}
 				{% component 'ui-button' additional_classes="rounded-full ml-3" text="Upraviť analýzu" primary=True type="link" href=analysis_edit_url %}
+                {% endif %}
 
-				{# TODO #}
-				{# @can('admin')#}
-				<form action="{% url 'analysis-detail' analysis.id %}" method="POST">
+                {% if request.user|has_permission:'analyses.delete_analysis' %}
+                <form action="{% url 'analysis-detail' analysis.id %}" method="POST">
 					{% csrf_token %}
 					{% method_override 'DELETE' %}
 					{% component 'ui-button' additional_classes="rounded-full ml-3" text="Vymazať analýzu" danger=True type="submit" %}
 				</form>
+                {% endif %}
 			</div>
 		</div>
 	</div>
