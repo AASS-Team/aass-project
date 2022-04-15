@@ -1,7 +1,9 @@
 from django.contrib.auth import logout
+from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.utils.decorators import method_decorator
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -34,7 +36,9 @@ class Administration(LoginRequiredMixin, APIView):
 
     renderer_classes = [TemplateHTMLRenderer]
 
-    # @method_decorator(permission_required("app.view_administration", raise_exception=True))
+    @method_decorator(
+        permission_required(("tools.view_tool", "labs.view_lab"), raise_exception=True)
+    )
     def get(self, request, format=None):
         return Response(
             template_name="administration/index.html",

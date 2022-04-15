@@ -16,8 +16,6 @@
 				{% url 'grant-edit' grant.id as grant_edit_url %}
 				{% component 'ui-button' additional_classes="rounded-full ml-3" text="Upraviť grant" primary=True type="link" href=grant_edit_url %}
 
-				{# TODO #}
-				{# @can('admin')#}
 				<form action="{% url 'grant-detail' grant.id %}" method="POST">
 					{% csrf_token %}
 					{% method_override 'DELETE' %}

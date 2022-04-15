@@ -35,8 +35,6 @@
 				{% url 'lab-edit' lab.id as lab_edit_url %}
 				{% component 'ui-button' additional_classes="rounded-full ml-3" text="Upraviť laboratórium" primary=True type="link" href=lab_edit_url %}
 
-				{# TODO #}
-				{# @can('admin')#}
 				<form action="{% url 'lab-detail' lab.id %}" method="POST">
 					{% csrf_token %}
 					{% method_override 'DELETE' %}

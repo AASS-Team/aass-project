@@ -22,7 +22,6 @@
 			>
 
 			{# typ #}
-            {# TODO selectbox #}
 			{% component_block 'ui-label' key="typ" label_for="type" additional_classes="mt-10" center=True %}
 				{% slot content %}
                     {% obj_get request.POST 'type' as value %}

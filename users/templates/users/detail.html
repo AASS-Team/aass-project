@@ -45,14 +45,10 @@
 				{% endslot %}
 			{% endcomponent_block %}
 
-			{# TODO #}
-			{# @can('laborant')#}
 			<div class="flex flex-row justify-end mt-5">
 				{% url 'user-edit' user.id as user_edit_url %}
 				{% component 'ui-button' additional_classes="rounded-full ml-3" text="Upraviť používateľa" primary=True type="link" href=user_edit_url %}
 
-				{# TODO #}
-				{# @can('admin')#}
 				<form action="{% url 'user-detail' user.id %}" method="POST">
 					{% csrf_token %}
 					{% method_override 'DELETE' %}

@@ -1,6 +1,7 @@
 {% extends 'app.html' %}
 
 {% load get_table_row_class %}
+{% load has_permission %}
 
 {% block title %}Vzorky{% endblock %}
 
@@ -19,7 +20,6 @@
 </script>
 {% endblock %}
 
-{# TODO user can view only his #}
 {% block content %}
 
 	<div class="bg-white rounded-lg">
@@ -40,7 +40,9 @@
 				{% component 'ui-search' additional_classes="shadow-sm border mr-3" value=request.GET.search extendable="True" %}
 			</form>
 
-			{% component 'ui-button' icon="fas fa-plus" additional_classes="rounded-full" text="Pridať vzorku" type="link" href='new' primary=True %}
+            {% if request.user|has_permission:'samples.add_sample' %}
+			    {% component 'ui-button' icon="fas fa-plus" additional_classes="rounded-full" text="Pridať vzorku" type="link" href='new' primary=True %}
+            {% endif %}
 		</div>
 	</div>
 

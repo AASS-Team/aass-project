@@ -1,5 +1,7 @@
 {% extends 'app.html' %}
 
+{% load has_permission %}
+{% load has_group %}
 {% load method_override %}
 {% load boolean %}
 
@@ -11,41 +13,44 @@
 			<h1 class="text-2xl mb-10">
 				{{ sample.name }}
 			</h1>
-
-			{# TODO #}
-			{#	@if($sample->user->id != Auth::id())#}
+            {%  if request.user.id|stringformat:"s" != sample.user.id  %}
 			{% component_block 'ui-label' key="používateľ" center=True %}
 				{% slot content %}
-				{# TODO #}
-				{# @can('admin') #}
-				{# <a #}
-				{#	class="text-blue-600 hover:underline"#}
-				{#	href="{{ url('/users',$sample->user->id) }}"#}
-				{# >#}
-				{# {{ $sample->user->login }}#}
-				{#	</a>#}
-				<p>
-					{{ sample.user.name }}
-				</p>
+                    {% if request.user|has_group:'admin' %}
+				    <a
+					    class="text-blue-600 hover:underline"
+					    href="{% url 'user-detail' sample.user.id %}"
+				    >
+				        {{ sample.user.name }}
+					</a>
+                    {% else %}
+				    <p>
+					    {{ sample.user.name }}
+				    </p>
+                    {% endif %}
 				{% endslot %}
 			{% endcomponent_block %}
+            {% endif %}
 
-			{# grant #}
+            {# grant #}
+            {% if sample.grant|boolean %}
 			{% component_block 'ui-label' key="grant" center=True %}
 				{% slot content %}
-					{# TODO #}
-					{# @can('admin') #}
-					{# <a #}
-					{#	class="text-blue-600 hover:underline"#}
-					{#	href="{{ url('/users',$sample->user->id) }}"#}
-					{#	>#}
-					{#	{{ $sample->user->login }}#}
-					{#	</a>#}
-					<p>
-						{{ sample.grant.name|truncatewords:10 }}
-					</p>
+                    {% if request.user|has_group:'admin' %}
+                        <a
+                                class="text-blue-600 hover:underline"
+                                href="{% url 'grant-detail' sample.grant.id %}"
+                        >
+						    {{ sample.grant.name|truncatewords:5 }}
+                        </a>
+                    {% else %}
+                    <p>
+                        {{ sample.grant.name|truncatewords:5 }}
+                    </p>
+                    {% endif %}
 				{% endslot %}
 			{% endcomponent_block %}
+            {% endif %}
 
 			{# mnozstvo #}
 			{% component_block 'ui-label' key="množstvo" center=True %}
@@ -57,44 +62,52 @@
 				{% endslot %}
 			{% endcomponent_block %}
 
+            {# analýza #}
+{#          TODO (fgic): return whole analysis object without circular dependency #}
+{#          {% if sample.analysis|boolean %}#}
+{#                {% component_block 'ui-label' key="analýza" center=True %}#}
+{#                    {% slot content %}#}
+{#                        <p>#}
+{#                            {{ sample.amount }}#}
+{#                        </p>#}
+{#                    {% endslot %}#}
+{#                {% endcomponent_block %}#}
+{#          {% endif %}#}
+
 			{# poznamka #}
 			{% component_block 'ui-label' key="poznámka" %}
 				{% slot content %}
-					<p>
-						{{ sample.note }}
-					</p>
+                    <textarea
+                        name="note"
+                        class="text-gray-700 w-2/3 bg-gray-300 p-2 rounded focus:outline-none placeholder-gray-500"
+                        disabled
+                        rows="4"
+                    >{{ sample.note }}</textarea>
 				{% endslot %}
 			{% endcomponent_block %}
 
-			{# TODO #}
-			{# analyza #}
-			{# {% component_block 'ui-label' key="analyza" %}#}
-			{#	{% slot content %}#}
-			{#	{% endslot %}#}
-			{#	{% endcomponent_block %}#}
-
-			{# TODO #}
-			{# @can('laborant')#}
 			<div class="flex flex-row justify-end mt-5">
 
-                {% if sample.analysis|length|boolean|negate %} {# only if has no analysis #}
+                {% if sample.analysis|length|boolean|negate and request.user|has_permission:'analyses.add_analysis' %} {# only if has no analysis #}
 				{% url 'analysis-new' as new_analysis_url  %}
 				    {% with url_new=new_analysis_url|add:'?sample='|add:sample.id %}
-                    {# TODO add sample as query parameter #}
+                        {# TODO add sample as query parameter #}
 				        {% component 'ui-button' additional_classes="rounded-full" text="Analyzovať" type="link" primary=True href=url_new %}
 				    {% endwith %}
                 {% endif %}
 
+                {% if request.user|has_permission:'samples.change_sample' %}
 				{% url 'sample-edit' sample.id as sample_edit_url %}
 				{% component 'ui-button' additional_classes="rounded-full ml-3" text="Upraviť vzorku" primary=True type="link" href=sample_edit_url %}
+                {% endif %}
 
-				{# TODO #}
-				{# @can('admin')#}
+                {% if request.user|has_permission:'samples.delete_sample' %}
 				<form action="{% url 'sample-detail' sample.id %}" method="POST">
 					{% csrf_token %}
 					{% method_override 'DELETE' %}
                     {% component 'ui-button' additional_classes="rounded-full ml-3" text="Vymazať vzorku" danger=True type="submit" disabled=sample.analysis|length|boolean %}
 				</form>
+                {% endif %}
 			</div>
 		</div>
 	</div>
