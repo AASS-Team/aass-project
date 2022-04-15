@@ -1,6 +1,7 @@
 {% extends 'app.html' %}
 
 {% load method_override %}
+{% load map_status %}
 
 {% block title %}{{ tool.name }}{% endblock %}
 
@@ -11,20 +12,20 @@
                 {{ tool.name }}
             </h1>
 
+            {% component_block 'ui-label' key="stav" center=True %}
+                {% slot content %}
+                    <div class="relative flex items-center">
+                        {% component 'status-icon' available=tool.available style="position:absolute; left:-1em;" %}
+                        {{ tool.available | map_status }}
+                    </div>
+                {% endslot %}
+            {% endcomponent_block %}
+
             {# typ #}
             {% component_block 'ui-label' key="type" %}
                 {% slot content %}
                     <p>
                         {{ tool.type }}
-                    </p>
-                {% endslot %}
-            {% endcomponent_block %}
-
-            {# dostupnost #}
-            {% component_block 'ui-label' key="dostupnost" %}
-                {% slot content %}
-                    <p>
-                        {{ tool.available }}
                     </p>
                 {% endslot %}
             {% endcomponent_block %}

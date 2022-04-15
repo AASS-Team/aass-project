@@ -43,12 +43,12 @@ class AnalysisList(LoginRequiredMixin, APIView):
             },
             "header": {
                 "items": [
-                    # TODO status icon
                     {
-                        "name": "stav",
+                        "name": "",
                         "key": "status",
                     },
                     {"name": "vzorka", "key": "sample"},
+                    {"name": "stav", "key": "status"},
                 ]
             },
             "layout": [

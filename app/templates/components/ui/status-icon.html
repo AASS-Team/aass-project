@@ -1,0 +1,16 @@
+<div class="h-2 w-2 rounded-full inline-block
+    {% if available == False %}
+    bg-red-500
+    {% endif %}
+    {% if status == 'IN_PROGRESS' %}
+    bg-yellow-500
+    {% endif %}
+    {% if status == 'PENDING' %}
+    bg-white border border-gray-600
+    {% endif %}
+    {% if status == 'FINISHED' or available == True %}
+    bg-green-500
+    {% endif %}
+    "
+    {{ attributes | safe }}
+></div>

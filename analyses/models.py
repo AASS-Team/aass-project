@@ -5,9 +5,9 @@ import uuid
 
 class Analysis(models.Model):
     class Status(models.TextChoices):
-        FINISHED = "Finished"
-        PENDING = "Pending"
-        IN_PROGRESS = "In progress"
+        FINISHED = "FINISHED"
+        PENDING = "PENDING"
+        IN_PROGRESS = "IN_PROGRESS"
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     sample = models.ForeignKey(Sample, on_delete=models.RESTRICT, null=True)

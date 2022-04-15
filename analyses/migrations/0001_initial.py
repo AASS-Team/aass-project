@@ -34,9 +34,9 @@ class Migration(migrations.Migration):
                     "status",
                     models.CharField(
                         choices=[
-                            ("Finished", "Finished"),
-                            ("Pending", "Pending"),
-                            ("In progress", "In Progress"),
+                            ("FINISHED", "Finished"),
+                            ("PENDING", "Pending"),
+                            ("IN_PROGRESS", "In Progress"),
                         ],
                         max_length=12,
                     ),

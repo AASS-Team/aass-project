@@ -2,6 +2,7 @@
 
 {% load component_tags %}
 {% load get_table_row_class %}
+{% load map_status %}
 
 {% block title %}Nástroje{% endblock %}
 
@@ -47,17 +48,16 @@
         {% component_block 'ui-table' options=options %}
             {% slot table_item %}
                 <td class="{% get_table_row_class options 0 %}">
-                    {{  item.name|truncatewords:10 }}
+                    {% component 'status-icon' available=item.available %}
                 </td>
                 <td class="{% get_table_row_class options 1 %}">
-                    {{  item.type }}
+                    {{  item.name|truncatewords:10 }}
                 </td>
                 <td class="{% get_table_row_class options 2 %}">
-                    {% if  item.available ==  True %}
-                        {{  "DOSTUPNE" }}
-                    {% else %}
-                        {{  "NEDOSTUPNE" }}
-                    {% endif %}
+                    {{  item.type }}
+                </td>
+                <td class="{% get_table_row_class options 3 %}">
+                    {{ item.available | map_status }}
                 </td>
             {% endslot %}
         {% endcomponent_block %}

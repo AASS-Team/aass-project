@@ -1,6 +1,7 @@
 {% extends 'app.html' %}
 
 {% load get_table_row_class %}
+{% load map_status %}
 
 {% block title %}Analýzy{% endblock %}
 
@@ -46,10 +47,13 @@
 	{% component_block 'ui-table' options=options %}
 		{% slot table_item %}
 			<td class="{% get_table_row_class options 0 %}">
-				{{  item.status }}
-			</td>
+                {% component 'status-icon' status=item.status %}
+            </td>
 			<td class="{% get_table_row_class options 1 %}">
 				{{  item.sample.name }}
+			</td>
+			<td class="{% get_table_row_class options 2 %}">
+                {{  item.status | map_status }}
 			</td>
 		{% endslot %}
 	{% endcomponent_block %}
