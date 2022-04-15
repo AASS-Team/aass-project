@@ -23,7 +23,7 @@
 	"fields": {
 	  "name": "Sekvenátor Medirex MX2",
 	  "type": "machine",
-	  "available": true
+	  "available": false
 	}
   },
   {
@@ -32,7 +32,7 @@
 	"fields": {
 	  "name": "Pipeta veľká",
 	  "type": "tool",
-	  "available": true
+	  "available": false
 	}
   },
   {
@@ -41,7 +41,7 @@
 	"fields": {
 	  "name": "Centrifúga SRT HEMI",
 	  "type": "machine",
-	  "available": true
+	  "available": false
 	}
   }
 ]

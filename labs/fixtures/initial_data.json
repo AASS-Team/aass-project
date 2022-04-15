@@ -23,7 +23,7 @@
 	"fields": {
 	  "name": "A213",
 	  "address": "Radlinského 9, 812 37 Bratislava",
-	  "available": true
+	  "available": false
 	}
   },
   {
@@ -32,7 +32,7 @@
 	"fields": {
 	  "name": "A214",
 	  "address": "Radlinského 9, 812 37 Bratislava",
-	  "available": true
+	  "available": false
 	}
   },
   {
