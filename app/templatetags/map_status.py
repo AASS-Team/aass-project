@@ -7,13 +7,12 @@ register = template.Library()
 @register.filter()
 def map_status(status):
     if status == True:
-        return 'dostupné'
+        return "dostupné"
     if status == False:
-        return 'nedostupné'
+        return "nedostupné"
     if status == Analysis.Status.PENDING:
-        return 'v poradí'
+        return "v poradí"
     if status == Analysis.Status.IN_PROGRESS:
-        return 'rozpracovaná'
+        return "rozpracovaná"
     if status == Analysis.Status.FINISHED:
-        return 'hotovo'
-        
+        return "hotovo"
