@@ -25,7 +25,7 @@ class SampleList(LoginRequiredMixin, APIView):
 
     @method_decorator(permission_required("samples.view_sample", raise_exception=True))
     def get(self, request, format=None):
-        if request.user.groups.filter(name__in=["admin", "laborant"]).exists():
+        if request.user.groups.filter(name__in=["administrátor", "laborant"]).exists():
             samples = Sample.objects.all()
         else:
             samples = Sample.objects.filter(user=request.user.id)
@@ -117,7 +117,7 @@ class SampleDetail(LoginRequiredMixin, APIView):
         sample = self.get_object(id)
 
         if (
-            not request.user.groups.filter(name__in=["admin", "laborant"]).exists()
+            not request.user.groups.filter(name__in=["administrátor", "laborant"]).exists()
             and request.user.id != sample.user.id
         ):
             raise PermissionDenied()

@@ -33,7 +33,7 @@ class AnalysisList(LoginRequiredMixin, APIView):
         permission_required("analyses.view_analysis", raise_exception=True)
     )
     def get(self, request, format=None):
-        if request.user.groups.filter(name__in=["admin", "laborant"]).exists():
+        if request.user.groups.filter(name__in=["administrátor", "laborant"]).exists():
             analyses = Analysis.objects.all()
         else:
             analyses = Analysis.objects.filter(sample__user__id=request.user.id)
@@ -149,7 +149,7 @@ class AnalysisDetail(LoginRequiredMixin, APIView):
         analysis = self.get_object(id)
 
         if (
-            not request.user.groups.filter(name__in=["admin", "laborant"]).exists()
+            not request.user.groups.filter(name__in=["administrátor", "laborant"]).exists()
             and request.user.id != analysis.sample.user.id
         ):
             raise PermissionDenied()
