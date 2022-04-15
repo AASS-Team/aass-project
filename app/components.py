@@ -179,3 +179,16 @@ class UiSelect(component.Component):
 class Alert(component.Component):
     def get_template_name(self, context):
         return "components/alert/alert.html"
+
+
+@component.register("status-icon")
+class StatusIcon(component.Component):
+    def get_template_name(self, context):
+        return "components/ui/status-icon.html"
+
+    def get_context_data(self, status=None, available=None, **kwargs):
+        return {
+            "status": status,
+            "available": available,
+            "attributes": dict2attribute(kwargs),
+        }
