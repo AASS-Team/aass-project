@@ -33,12 +33,17 @@ class LabsList(APIView):
             },
             "header": {
                 "items": [
+                    {
+                        "name": "",
+                        "key": "status",
+                    },
                     {"name": "názov", "key": "name"},
                     {"name": "adresa", "key": "address"},
-                    {"name": "dostupnost", "key": "available"},
+                    {"name": "stav", "key": "available"},
                 ]
             },
             "layout": [
+                {"width": 8},
                 {"width": 96, "width-sm": 64, "left": True},
             ],
         }

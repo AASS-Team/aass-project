@@ -1,6 +1,7 @@
 {% extends 'app.html' %}
 
 {% load component_tags %}
+{% load map_status %}
 {% load method_override %}
 
 {% block title %}{{ lab.name }}{% endblock %}
@@ -11,6 +12,15 @@
 			<h1 class="text-2xl mb-10">
 				{{ lab.name }}
 			</h1>
+
+            {% component_block 'ui-label' key="stav" center=True %}
+                {% slot content %}
+                    <div class="relative flex items-center">
+                        {% component 'status-icon' available=lab.available style="position:absolute; left:-1em;" %}
+                        {{ lab.available | map_status }}
+                    </div>
+                {% endslot %}
+            {% endcomponent_block %}
 
             {# názov #}
             {% component_block 'ui-label' key="Názov" center=True %}
