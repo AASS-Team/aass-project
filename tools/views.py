@@ -29,12 +29,17 @@ class ToolList(APIView):
             },
             "header": {
                 "items": [
+                    {
+                        "name": "",
+                        "key": "status",
+                    },
                     {"name": "názov", "key": "name"},
                     {"name": "typ", "key": "type"},
-                    {"name": "dostupnost", "key": "avaitoolle"},
+                    {"name": "stav", "key": "available"},
                 ]
             },
             "layout": [
+                {"width": 8},
                 {"width": 96, "width-sm": 64, "left": True},
             ],
         }
