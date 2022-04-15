@@ -4,6 +4,7 @@ from django.shortcuts import redirect
 from django.contrib import messages
 from django.utils.decorators import method_decorator
 from rest_framework import status
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -32,7 +33,11 @@ class AnalysisList(LoginRequiredMixin, APIView):
         permission_required("analyses.view_analysis", raise_exception=True)
     )
     def get(self, request, format=None):
-        analyses = Analysis.objects.all()
+        if request.user.groups.filter(name__in=["admin", "laborant"]).exists():
+            analyses = Analysis.objects.all()
+        else:
+            analyses = Analysis.objects.filter(sample__user__id=request.user.id)
+
         serializer = self.serializer_class(analyses, many=True)
 
         options = {
@@ -142,6 +147,13 @@ class AnalysisDetail(LoginRequiredMixin, APIView):
     )
     def get(self, request, id, format=None):
         analysis = self.get_object(id)
+
+        if (
+            not request.user.groups.filter(name__in=["admin", "laborant"]).exists()
+            and request.user.id != analysis.sample.user.id
+        ):
+            raise PermissionDenied()
+
         serializer = AnalysisSerializer(analysis)
         return Response(
             data={"analysis": serializer.data}, template_name="analyses/detail.html"

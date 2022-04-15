@@ -155,6 +155,11 @@
           "sample"
         ],
         [
+          "view_analysis",
+          "analyses",
+          "analysis"
+        ],
+        [
           "add_analysis",
           "analyses",
           "analysis"
@@ -168,16 +173,6 @@
           "delete_analysis",
           "analyses",
           "analysis"
-        ],
-        [
-          "view_analysis",
-          "analyses",
-          "analysis"
-        ],
-        [
-          "view_grant",
-          "grants",
-          "grant"
         ]
       ]
     }
@@ -192,11 +187,6 @@
           "view_analysis",
           "analyses",
           "analysis"
-        ],
-        [
-          "view_grant",
-          "grants",
-          "grant"
         ],
         [
           "view_sample",
@@ -248,6 +238,22 @@
       "first_name": "Používateľ",
       "last_name": "Použitý",
       "email": "user@test.sk",
+      "groups": [
+        3
+      ],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": "d845c72a-2108-4b76-9dc0-2c3f936873ad",
+    "fields": {
+      "password": "pbkdf2_sha256$320000$5BA8Mc38ryTaDklFyTJuDz$SDLzFzBc9z+KK9Ks3enclbPvvPHHJ6prGiyMbVaPCjo=",
+      "last_login": null,
+      "is_superuser": false,
+      "first_name": "Používateľka",
+      "last_name": "Iná",
+      "email": "user2@test.sk",
       "groups": [
         3
       ],
