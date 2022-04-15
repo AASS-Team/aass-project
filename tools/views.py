@@ -3,6 +3,7 @@ from django.shortcuts import redirect
 from django.contrib import messages
 from django.utils.decorators import method_decorator
 from rest_framework import status
+from rest_framework.exceptions import NotFound
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -102,7 +103,7 @@ class ToolDetail(APIView):
         try:
             return Tool.objects.get(pk=id)
         except Tool.DoesNotExist:
-            return redirect("404")
+            raise NotFound()
 
     @method_decorator(permission_required("tools.view_tool", raise_exception=True))
     def get(self, request, id, format=None):
@@ -158,7 +159,7 @@ class ToolEdit(APIView):
         try:
             return Tool.objects.get(pk=id)
         except Tool.DoesNotExist:
-            return redirect("404")
+            raise NotFound()
 
     @method_decorator(permission_required("tools.change_tool", raise_exception=True))
     def get(self, request, id, format=None):

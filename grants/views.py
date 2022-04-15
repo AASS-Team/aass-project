@@ -4,6 +4,7 @@ from django.shortcuts import redirect
 from django.contrib import messages
 from django.utils.decorators import method_decorator
 from rest_framework import status
+from rest_framework.exceptions import NotFound
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -92,7 +93,7 @@ class GrantDetail(LoginRequiredMixin, APIView):
         try:
             return Grant.objects.get(pk=id)
         except Grant.DoesNotExist:
-            return redirect("404")
+            raise NotFound()
 
     @method_decorator(permission_required("grants.view_grant", raise_exception=True))
     def get(self, request, id, format=None):
@@ -146,7 +147,7 @@ class GrantEdit(LoginRequiredMixin, APIView):
         try:
             return Grant.objects.get(pk=id)
         except Grant.DoesNotExist:
-            return redirect("404")
+            raise NotFound()
 
     @method_decorator(permission_required("grants.change_grant", raise_exception=True))
     def get(self, request, id, format=None):
