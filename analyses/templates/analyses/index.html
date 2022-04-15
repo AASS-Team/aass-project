@@ -48,6 +48,7 @@
 		{% slot table_item %}
 			<td class="{% get_table_row_class options 0 %}">
                 {% component 'status-icon' status=item.status %}
+            </td>
 			<td class="{% get_table_row_class options 1 %}">
 				{{  item.sample.name }}
 			</td>

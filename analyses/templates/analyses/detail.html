@@ -1,49 +1,45 @@
 {% extends 'app.html' %}
 
 {% load method_override %}
+{% load map_status %}
 
 {% block title %}{{ sample.name }}{% endblock %}
 
 {% block content %}
 	<div class="bg-white rounded-lg">
 		<div class="p-4 pl-6">
-			<h1 class="text-2xl mb-10">
-				{{ sample.name }}
-			</h1>
 
-			{# vzorka #}
-			{% component_block 'ui-label' key="vzorka" center=True %}
-				{% slot content %}
-					{# TODO #}
-					{# @can('admin') #}
-					{# <a #}
-					{#	class="text-blue-600 hover:underline"#}
-					{#	href="{{ url('/users',$sample->user->id) }}"#}
-					{#	>#}
-					{#	{{ $sample->user->login }}#}
-					{#	</a>#}
-					<p>
-						{{ analysis.sample.name|truncatewords:10 }}
-					</p>
-				{% endslot %}
-			{% endcomponent_block %}
+            <h1
+                class="text-2xl mb-10"
+            >
+                <span class="text-gray-600">Analýza vzorky  </span>
+                <a
+                    class="text-blue-600 hover:underline ml-1"
+                    href="{% url 'sample-detail' analysis.sample.id %} url }}"
+                >
+                    {{ analysis.sample.name | truncatewords:5 }}
+                </a>
+            </h1>
 
-			{# laborant #}
-			{% component_block 'ui-label' key="laborant" center=True %}
-				{% slot content %}
-					{# TODO #}
-					{# @can('admin') #}
-					{# <a #}
-					{#	class="text-blue-600 hover:underline"#}
-					{#	href="{{ url('/users',$sample->user->id) }}"#}
-					{#	>#}
-					{#	{{ $sample->user->login }}#}
-					{#	</a>#}
-					<p>
-						{{ analysis.laborant.name }}
-					</p>
-				{% endslot %}
-			{% endcomponent_block %}
+            {# stav #}
+            {% component_block 'ui-label' key="stav" center=True %}
+                {% slot content %}
+                    <div class="relative flex items-center">
+                        {% component 'status-icon' status=analysis.status style="position:absolute; left:-1em;" %}
+                        {{ analysis.status | map_status }}
+                        <span
+                                class="ml-1"
+                        >
+                            (<a
+                                class="text-blue-600 hover:underline"
+                                href="{% url 'user-detail' analysis.laborant.id %}"
+                                >
+                                {{ analysis.laborant.name }}
+                          </a>)
+                        </span>
+                    </div>
+                {% endslot %}
+            {% endcomponent_block %}
 
 			{# lab #}
 			{% component_block 'ui-label' key="laboratórium" center=True %}
