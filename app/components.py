@@ -58,7 +58,7 @@ class UiButton(component.Component):
     def get_context_data(
         self,
         text,
-        additional_classes,
+        additional_classes=None,
         type=None,
         icon=None,
         href=None,
