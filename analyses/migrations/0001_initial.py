@@ -50,6 +50,7 @@ class Migration(migrations.Migration):
                     models.ForeignKey(
                         null=True,
                         on_delete=django.db.models.deletion.RESTRICT,
+                        related_name="analysis",
                         to="labs.lab",
                     ),
                 ),
@@ -58,6 +59,7 @@ class Migration(migrations.Migration):
                     models.ForeignKey(
                         null=True,
                         on_delete=django.db.models.deletion.RESTRICT,
+                        related_name="analyses",
                         to=settings.AUTH_USER_MODEL,
                     ),
                 ),
@@ -66,10 +68,14 @@ class Migration(migrations.Migration):
                     models.ForeignKey(
                         null=True,
                         on_delete=django.db.models.deletion.RESTRICT,
+                        related_name="analysis",
                         to="samples.sample",
                     ),
                 ),
-                ("tools", models.ManyToManyField(to="tools.tool")),
+                (
+                    "tools",
+                    models.ManyToManyField(related_name="analysis", to="tools.tool"),
+                ),
             ],
         ),
     ]
