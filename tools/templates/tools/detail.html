@@ -2,6 +2,7 @@
 
 {% load method_override %}
 {% load map_status %}
+{% load boolean %}
 
 {% block title %}{{ tool.name }}{% endblock %}
 
@@ -35,12 +36,11 @@
                 {% component 'ui-button' additional_classes="rounded-full ml-3" text="Upraviť nástroj" primary=True type="link" href=tool_edit_url %}
 
                 {# TODO #}
-                {# if not used #}
                 {# @can('admin')#}
                 <form action="{% url 'tool-detail' tool.id %}" method="POST">
                     {% csrf_token %}
                     {% method_override 'DELETE' %}
-                    {% component 'ui-button' additional_classes="rounded-full ml-3" text="Vymazať nástroj" danger=True type="submit" %}
+                    {% component 'ui-button' additional_classes="rounded-full ml-3" text="Vymazať nástroj" danger=True type="submit" disabled=tool.analysis|length|boolean %}
                 </form>
             </div>
         </div>

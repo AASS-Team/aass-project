@@ -71,23 +71,23 @@ class UiButton(component.Component):
 
         class_object = "flex justify-center items-center px-3 py-1 focus:outline-none "
 
-        if disabled is not None and disabled is True:
-            class_object += (
-                "bg-gray-400 text-white hover:bg-gray-400 hover:cursor-default "
-            )
-        else:
-            class_object += "hover:cursor-pointer "
-
-        if primary is not None:
+        if primary is not None and not disabled:
             class_object += "bg-yellow-500 text-white hover:bg-yellow-400 "
 
-        if secondary is not None:
+        if secondary is not None and not disabled:
             class_object += "border border-gray-600 text-gray-600 bg-gray-200 "
 
-        if danger is not None:
+        if danger is not None and not disabled:
             class_object += (
                 "border border-red-500 text-red-500 hover:bg-red-500 hover:text-white "
             )
+
+        if disabled is not None and bool(disabled):
+            class_object += (
+                "bg-gray-400 text-white hover:bg-gray-400 cursor-not-allowed "
+            )
+        else:
+            class_object += "hover:cursor-pointer "
 
         if additional_classes is not None:
             class_object += additional_classes
@@ -97,6 +97,7 @@ class UiButton(component.Component):
             "icon": icon,
             "type": type,
             "href": href,
+            "disabled": disabled,
             "class_object": class_object,
             "attributes": dict2attribute(kwargs),
         }

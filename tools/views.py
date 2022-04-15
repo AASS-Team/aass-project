@@ -1,6 +1,7 @@
-# Create your views here.
+from django.contrib.auth.decorators import permission_required
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.utils.decorators import method_decorator
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -18,6 +19,7 @@ class ToolList(APIView):
     serializer_class = serializers.ToolSerializer
     renderer_classes = [TemplateHTMLRenderer]
 
+    @method_decorator(permission_required("tools.view_tool", raise_exception=True))
     def get(self, request, format=None):
         tools = Tool.objects.all()
         serializer = self.serializer_class(tools, many=True)
@@ -49,6 +51,7 @@ class ToolList(APIView):
             template_name="tools/index.html",
         )
 
+    @method_decorator(permission_required("tools.add_tool", raise_exception=True))
     def post(self, request, format=None):
         serializer = self.serializer_class(data=request.data)
 
@@ -80,6 +83,7 @@ class ToolCreate(APIView):
 
     renderer_classes = [TemplateHTMLRenderer]
 
+    @method_decorator(permission_required("tools.add_tool", raise_exception=True))
     def get(self, request, format=None):
 
         return Response(
@@ -100,6 +104,7 @@ class ToolDetail(APIView):
         except Tool.DoesNotExist:
             return redirect("404")
 
+    @method_decorator(permission_required("tools.view_tool", raise_exception=True))
     def get(self, request, id, format=None):
         tool = self.get_object(id)
         serializer = serializers.ToolSerializer(tool)
@@ -107,6 +112,7 @@ class ToolDetail(APIView):
             data={"tool": serializer.data}, template_name="tools/detail.html"
         )
 
+    @method_decorator(permission_required("tools.change_tool", raise_exception=True))
     def put(self, request, id, format=None):
         tool = self.get_object(id)
         serializer = serializers.ToolSerializer(tool, data=request.data)
@@ -128,6 +134,7 @@ class ToolDetail(APIView):
             data={"tool": serializer.data}, template_name="tools/detail.html"
         )
 
+    @method_decorator(permission_required("tools.delete_tool", raise_exception=True))
     def delete(self, request, id, format=None):
         tool = self.get_object(id)
         deleted_rows = tool.delete()
@@ -153,6 +160,7 @@ class ToolEdit(APIView):
         except Tool.DoesNotExist:
             return redirect("404")
 
+    @method_decorator(permission_required("tools.change_tool", raise_exception=True))
     def get(self, request, id, format=None):
         tool = self.get_object(id)
         serializer = serializers.ToolSerializer(tool)

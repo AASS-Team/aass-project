@@ -1,16 +1,13 @@
-from django.shortcuts import render
-
-# Create your views here.
+from django.contrib.auth.decorators import permission_required
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.utils.decorators import method_decorator
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.renderers import TemplateHTMLRenderer
 
 from . import serializers
-from grants.models import Grant
-from users.models import User
 from labs.models import Lab
 
 
@@ -22,6 +19,7 @@ class LabsList(APIView):
     serializer_class = serializers.LabSerializer
     renderer_classes = [TemplateHTMLRenderer]
 
+    @method_decorator(permission_required("labs.view_lab", raise_exception=True))
     def get(self, request, format=None):
         labs = Lab.objects.all()
         serializer = self.serializer_class(labs, many=True)
@@ -53,6 +51,7 @@ class LabsList(APIView):
             template_name="labs/index.html",
         )
 
+    @method_decorator(permission_required("labs.add_lab", raise_exception=True))
     def post(self, request, format=None):
         serializer = self.serializer_class(data=request.data)
 
@@ -83,6 +82,7 @@ class LabCreate(APIView):
 
     renderer_classes = [TemplateHTMLRenderer]
 
+    @method_decorator(permission_required("labs.add_lab", raise_exception=True))
     def get(self, request, format=None):
 
         return Response(
@@ -103,11 +103,13 @@ class LabDetail(APIView):
         except Lab.DoesNotExist:
             return redirect("404")
 
+    @method_decorator(permission_required("labs.view_lab", raise_exception=True))
     def get(self, request, id, format=None):
         lab = self.get_object(id)
         serializer = serializers.LabSerializer(lab)
         return Response(data={"lab": serializer.data}, template_name="labs/detail.html")
 
+    @method_decorator(permission_required("labs.change_lab", raise_exception=True))
     def put(self, request, id, format=None):
         lab = self.get_object(id)
         serializer = serializers.LabSerializer(lab, data=request.data)
@@ -127,6 +129,7 @@ class LabDetail(APIView):
         messages.add_message(request, messages.SUCCESS, "Laboratórium uložené")
         return Response(data={"lab": serializer.data}, template_name="labs/detail.html")
 
+    @method_decorator(permission_required("labs.delete_lab", raise_exception=True))
     def delete(self, request, id, format=None):
         lab = self.get_object(id)
         deleted_rows = lab.delete()
@@ -152,6 +155,7 @@ class LabEdit(APIView):
         except Lab.DoesNotExist:
             return redirect("404")
 
+    @method_decorator(permission_required("labs.change_lab", raise_exception=True))
     def get(self, request, id, format=None):
         lab = self.get_object(id)
         serializer = serializers.LabSerializer(lab)

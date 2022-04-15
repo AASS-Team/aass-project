@@ -6,10 +6,20 @@ from .models import User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = "__all__"
-
-    name = serializers.ReadOnlyField()
-    groups = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all(), many=True)
+        fields = (
+            "id",
+            "name",
+            "first_name",
+            "last_name",
+            "email",
+            "analyses",
+            "samples",
+            "groups",
+        )
+        read_only_fields = (
+            "analyses",
+            "samples",
+        )  # read only when saving user, so analyses & samples won't be NULL after save
 
     def to_representation(self, instance):
         self.fields["groups"] = GroupSerializer(many=True)
@@ -19,4 +29,7 @@ class UserSerializer(serializers.ModelSerializer):
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
-        fields = ["id", "name"]
+        fields = (
+            "id",
+            "name",
+        )

@@ -1,6 +1,7 @@
 {% extends 'app.html' %}
 
 {% load method_override %}
+{% load boolean %}
 
 {% block title %}{{ grant.name }}{% endblock %}
 
@@ -16,12 +17,11 @@
 				{% component 'ui-button' additional_classes="rounded-full ml-3" text="Upraviť grant" primary=True type="link" href=grant_edit_url %}
 
 				{# TODO #}
-				{# if not used #}
 				{# @can('admin')#}
 				<form action="{% url 'grant-detail' grant.id %}" method="POST">
 					{% csrf_token %}
 					{% method_override 'DELETE' %}
-					{% component 'ui-button' additional_classes="rounded-full ml-3" text="Vymazať grant" danger=True type="submit" %}
+					{% component 'ui-button' additional_classes="rounded-full ml-3" text="Vymazať grant" danger=True type="submit" disabled=grant.samples|length|boolean %}
 				</form>
 			</div>
 		</div>

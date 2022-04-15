@@ -37,6 +37,7 @@ class Migration(migrations.Migration):
                     models.ForeignKey(
                         null=True,
                         on_delete=django.db.models.deletion.RESTRICT,
+                        related_name="samples",
                         to="grants.grant",
                     ),
                 ),
@@ -44,6 +45,7 @@ class Migration(migrations.Migration):
                     "user",
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.PROTECT,
+                        related_name="samples",
                         to=settings.AUTH_USER_MODEL,
                     ),
                 ),
