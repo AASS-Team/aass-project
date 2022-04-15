@@ -1,6 +1,7 @@
 {% extends 'app.html' %}
 
 {% load method_override %}
+{% load boolean %}
 
 {% block title %}{{ user.name }}{% endblock %}
 
@@ -55,8 +56,9 @@
 				<form action="{% url 'user-detail' user.id %}" method="POST">
 					{% csrf_token %}
 					{% method_override 'DELETE' %}
-					{% component 'ui-button' additional_classes="rounded-full ml-3" text="Vymazať používateľa" danger=True type="submit" %}
-				</form>
+                    {% firstof user.samples|length|boolean user.analyses|length|boolean as disabled %} {# disabled if user has analyses or samples #}
+                    {% component 'ui-button' additional_classes="rounded-full ml-3" text="Vymazať používateľa" danger=True type="submit" disabled=disabled %}
+                </form>
 			</div>
 		</div>
 	</div>
