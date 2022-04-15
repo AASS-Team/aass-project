@@ -4,6 +4,7 @@ from django.shortcuts import redirect
 from django.contrib import messages
 from django.utils.decorators import method_decorator
 from rest_framework import status
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -24,7 +25,11 @@ class SampleList(LoginRequiredMixin, APIView):
 
     @method_decorator(permission_required("samples.view_sample", raise_exception=True))
     def get(self, request, format=None):
-        samples = Sample.objects.all()
+        if request.user.groups.filter(name__in=["admin", "laborant"]).exists():
+            samples = Sample.objects.all()
+        else:
+            samples = Sample.objects.filter(user=request.user.id)
+
         serializer = self.serializer_class(samples, many=True)
         options = {
             "data": {
@@ -110,6 +115,13 @@ class SampleDetail(LoginRequiredMixin, APIView):
     @method_decorator(permission_required("samples.view_sample", raise_exception=True))
     def get(self, request, id, format=None):
         sample = self.get_object(id)
+
+        if (
+            not request.user.groups.filter(name__in=["admin", "laborant"]).exists()
+            and request.user.id != sample.user.id
+        ):
+            raise PermissionDenied()
+
         serializer = serializers.SampleSerializer(sample)
         return Response(
             data={"sample": serializer.data}, template_name="samples/detail.html"
