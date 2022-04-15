@@ -22,6 +22,15 @@
                     value="{% obj_get request.POST 'name' tool.name %}"
                 >
 
+                {# typ #}
+                {% component_block 'ui-label' key="typ" label_for="type" additional_classes="mt-10" center=True %}
+                    {% slot content %}
+                        {% obj_get request.POST 'type' as old_value %}
+                        {% firstof old_value tool.type as value %}
+                        {% component 'ui-input' name="type" type="text" additional_classes="text-gray-700" required=True value=value errors=errors%}
+                    {% endslot %}
+                {% endcomponent_block %}
+
                 <div class="flex flex-row justify-end mt-5">
                     {% component 'ui-button' additional_classes="rounded-full w-24" text="Uložiť" type="submit" primary=True %}
                 </div>
