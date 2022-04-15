@@ -5,6 +5,27 @@
 
 {% block title %}Upraviť analýzu {{ analysis.name }}{% endblock %}
 
+{% block script %}
+    <script defer>
+        const selectTemplate = `<div class="flex flex-row relative items-center mb-3">
+                                    {% component 'ui-select' name="tools" items=tools additional_classes="text-gray-700 w-full" required=True errors=errors selected=tool.id %}
+                                    <a href="javascript:void(0)" class="absolute text-xl remove-tool-btn" style="right:-1em;">&times;</a>
+                                </div>`;
+
+        setTimeout(function () {
+            const toolsWrapper = document.querySelector('#toolsWrapper');
+            document.addEventListener('click', function (e) {
+                if (e.target && e.target.id === 'addToolBtn') {
+                    toolsWrapper.insertAdjacentHTML('beforeend', selectTemplate);
+                }
+                if (e.target && e.target.classList.contains('remove-tool-btn')) {
+                    e.target.parentNode.remove();
+                }
+            });
+        }, 750);
+    </script>
+{% endblock %}
+
 {% block content %}
 	<div class="bg-white rounded-lg">
 		<div class="p-4 pl-6">
@@ -15,30 +36,40 @@
 				{# vzorka #}
 				{% component_block 'ui-label' key="vzorka" label_for="sample" additional_classes="mt-10" center=True %}
 					{% slot content %}
-						{% component 'ui-select' name="sample" items=samples additional_classes="text-gray-700 w-1/4" required=True errors=errors selected=analysis.sample.id %}
+						{% component 'ui-select' name="sample" items=samples additional_classes="text-gray-700 w-1/4" required=True errors=errors selected=analysis.sample %}
 					{% endslot %}
 				{% endcomponent_block %}
 
 				{# laborant #}
-				{% component_block 'ui-label' key="laborant" label_for="laborant" additional_classes="mt-10" center=True %}
+				{% component_block 'ui-label' key="laborant" label_for="laborant" center=True %}
 					{% slot content %}
 						{% component 'ui-select' name="laborant" items=laborants additional_classes="text-gray-700 w-1/4" required=True errors=errors selected=analysis.laborant.id %}
 					{% endslot %}
 				{% endcomponent_block %}
 
 				{# lab #}
-				{% component_block 'ui-label' key="laboratórium" label_for="lab" additional_classes="mt-10" center=True %}
+				{% component_block 'ui-label' key="laboratórium" label_for="lab" center=True %}
 					{% slot content %}
 						{% component 'ui-select' name="lab" items=labs additional_classes="text-gray-700 w-1/4" required=True errors=errors selected=analysis.lab.id %}
 					{% endslot %}
 				{% endcomponent_block %}
 
-				{# naradie #}
-				{% component_block 'ui-label' key="náradie" label_for="tools" additional_classes="mt-10" center=True %}
-					{% slot content %}
-						{% component 'ui-select' name="tools" items=tools additional_classes="text-gray-700 w-1/4" required=True errors=errors selected=analysis.tools.0.id %}
-					{% endslot %}
-				{% endcomponent_block %}
+                {# náradie #}
+                {% component_block 'ui-label' key="náradie" label_for="tools"%}
+                    {% slot content %}
+                        <div class="flex-col w-1/4">
+                            <div id="toolsWrapper" class="flex-col">
+                                {% for tool in analysis.tools %}
+                                    <div class="flex flex-row relative items-center mb-3">
+                                        {% component 'ui-select' name="tools" items=tools additional_classes="text-gray-700 w-full" required=True errors=errors selected=tool.id %}
+                                        <a href="javascript:void(0)" class="absolute text-xl remove-tool-btn" style="right:-1em;">&times;</a>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            {% component 'ui-button' type='link' href="javascript:void(0)" secondary=True id="addToolBtn" text="+ Pridať nástroj" additional_classes="rounded-full" %}
+                        </div>
+                    {% endslot %}
+                {% endcomponent_block %}
 
 				{# TODO struktura #}
 

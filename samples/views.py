@@ -4,7 +4,7 @@ from django.shortcuts import redirect
 from django.contrib import messages
 from django.utils.decorators import method_decorator
 from rest_framework import status
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import PermissionDenied, NotFound
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -110,7 +110,7 @@ class SampleDetail(LoginRequiredMixin, APIView):
         try:
             return Sample.objects.get(pk=id)
         except Sample.DoesNotExist:
-            return redirect("404")
+            raise NotFound()
 
     @method_decorator(permission_required("samples.view_sample", raise_exception=True))
     def get(self, request, id, format=None):
@@ -182,7 +182,7 @@ class SampleEdit(LoginRequiredMixin, APIView):
         try:
             return Sample.objects.get(pk=id)
         except Sample.DoesNotExist:
-            return redirect("404")
+            raise NotFound()
 
     @method_decorator(
         permission_required("samples.change_sample", raise_exception=True)
