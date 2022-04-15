@@ -4,48 +4,79 @@
 
 {% block title %}Nová analýza{% endblock %}
 
+{% block script %}
+    <script defer>
+        const selectTemplate = `<div class="flex flex-row relative items-center mb-3">
+                                    {% component 'ui-select' name="tools" items=tools additional_classes="text-gray-700 w-full" required=True errors=errors selected=tool.id %}
+                                    <a href="javascript:void(0)" class="removeToolBtn" class="absolute text-xl remove-tool-btn" style="right:-1em;">&times;</a>
+                                </div>`;
+
+        setTimeout(function () {
+            const toolsWrapper = document.querySelector('#toolsWrapper');
+            document.addEventListener('click', function (e) {
+                if (e.target && e.target.id === 'addToolBtn') {
+                    toolsWrapper.insertAdjacentHTML('beforeend', selectTemplate);
+                }
+                if (e.target && e.target.classList.contains('remove-tool-btn')) {
+                    e.target.parentNode.remove();
+                }
+            });
+        }, 750);
+    </script>
+{% endblock %}
+
 {% block content %}
+    <div class="bg-white rounded-lg">
+        <div class="p-4 pl-6">
+            <form action="{% url 'analysis-list' %}" method="POST">
+                {% csrf_token %}
+                <h1 class="text-2xl">
+                    Pridanie analýzy
+                </h1>
 
-<div class="bg-white rounded-lg">
-	<div class="p-4 pl-6">
-		<form action="{% url 'analysis-list' %}" method="POST">
-			{% csrf_token %}
-			<h1 class="text-2xl">
-				Pridanie analýzy
-			</h1>
+                {# vzorky #}
+                {% component_block 'ui-label' key="vzorka" label_for="sample" additional_classes="mt-10" center=True %}
+                    {% slot content %}
+                        {% component 'ui-select' name="sample" items=samples additional_classes="text-gray-700 w-1/4" required=True errors=errors %}
+                    {% endslot %}
+                {% endcomponent_block %}
 
-			{# vzorky #}
-			{% component_block 'ui-label' key="vzorka" label_for="sample" additional_classes="mt-10" center=True %}
-				{% slot content %}
-					{% component 'ui-select' name="sample" items=samples additional_classes="text-gray-700 w-1/4" required=True errors=errors%}
-				{% endslot %}
-			{% endcomponent_block %}
+                {# laborant #}
+                {% component_block 'ui-label' key="laborant" label_for="laborant" center=True %}
+                    {% slot content %}
+                        {% component 'ui-select' name="laborant" items=laborants additional_classes="text-gray-700 w-1/4" errors=errors %}
+                    {% endslot %}
+                {% endcomponent_block %}
 
-			{# laborant #}
-			{% component_block 'ui-label' key="laborant" label_for="laborant" center=True %}
-				{% slot content %}
-					{% component 'ui-select' name="laborant" items=laborants additional_classes="text-gray-700 w-1/4" errors=errors %}
-				{% endslot %}
-			{% endcomponent_block %}
+                {# laboratórium #}
+                {% component_block 'ui-label' key="laboratórium" label_for="lab" center=True %}
+                    {% slot content %}
+                        {% component 'ui-select' name="lab" items=labs additional_classes="text-gray-700 w-1/4" errors=errors %}
+                    {% endslot %}
+                {% endcomponent_block %}
 
-			{# laboratórium #}
-			{% component_block 'ui-label' key="laboratórium" label_for="lab" center=True %}
-				{% slot content %}
-					{% component 'ui-select' name="lab" items=labs additional_classes="text-gray-700 w-1/4" errors=errors %}
-				{% endslot %}
-			{% endcomponent_block %}
+                {# náradie #}
+                {% component_block 'ui-label' key="náradie" label_for="tools" %}
+                    {% slot content %}
+                        <div class="flex-col w-1/4">
+                            <div id="toolsWrapper" class="flex-col">
+                                <div class="flex flex-row relative items-center mb-3">
+                                    {% component 'ui-select' name="tools" items=tools additional_classes="text-gray-700 w-full" required=True errors=errors selected=tool.id %}
+                                    <a href="javascript:void(0)" class="absolute text-xl remove-tool-btn"
+                                       style="right:-1em;">&times;</a>
+                                </div>
+                            </div>
+                            {% component 'ui-button' type='link' href="javascript:void(0)" secondary=True id="addToolBtn" text="+ Pridať nástroj" additional_classes="rounded-full" %}
+                        </div>
+                    {% endslot %}
+                {% endcomponent_block %}
 
-			{# náradie #}
-			{% component_block 'ui-label' key="náradie" label_for="tools" center=True %}
-				{% slot content %}
-					{% component 'ui-select' name="tools" items=tools additional_classes="text-gray-700 w-1/4" errors=errors %}
-				{% endslot %}
-			{% endcomponent_block %}
 
-			<div class="flex flex-row justify-end mt-5">
-				{% component 'ui-button' additional_classes="rounded-full w-24" text="Uložiť" type="submit" primary=True %}
-			</div>
-		</form>
-	</div>
-</div>
+
+                <div class="flex flex-row justify-end mt-5">
+                    {% component 'ui-button' additional_classes="rounded-full w-24" text="Uložiť" type="submit" primary=True %}
+                </div>
+            </form>
+        </div>
+    </div>
 {% endblock %}
