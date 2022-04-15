@@ -1,3 +1,5 @@
+{% load boolean %}
+
 {% if type != 'link' %}
     <div class="{{ class_object }}">
         {% if icon is not None %}
@@ -15,9 +17,19 @@
             <input
                 type="{{type}}"
                 value="{{text}}"
-                class="focus:outline-none bg-transparent hover:cursor-pointer"
+                class="focus:outline-none bg-transparent
+                {% if disabled %}
+                cursor-not-allowed
+                {% else %}
+                cursor-pointer
+                {% endif %}
+                "
                 style="text-align: center;"
                 {{ attributes | safe }}
+                {% if disabled|boolean %}
+                disabled
+                {% endif %}
+            "
             />
         {% else %}
             <button
