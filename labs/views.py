@@ -10,6 +10,7 @@ from rest_framework.renderers import TemplateHTMLRenderer
 from . import serializers
 from labs.models import Lab
 
+
 class LabsList(APIView):
     """
     List all labs, or create a new lab.

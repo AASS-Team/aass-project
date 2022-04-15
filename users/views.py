@@ -35,6 +35,7 @@ class UserList(LoginRequiredMixin, APIView):
                 "items": [
                     {"name": "meno", "key": "name"},
                     {"name": "e-mail", "key": "email"},
+                    {"name": "rola", "key": "groups"},
                 ]
             },
             "layout": [
@@ -52,11 +53,13 @@ class UserList(LoginRequiredMixin, APIView):
         serializer = self.serializer_class(data=request.data)
 
         if not serializer.is_valid():
+            groups = serializers.GroupSerializer(Group.objects.all(), many=True)
             messages.add_message(
                 request, messages.ERROR, "Nepodarilo sa uložiť používateľa"
             )
             return Response(
                 data={
+                    "groups": groups.data,
                     "errors": serializer.errors,
                 },
                 status=status.HTTP_400_BAD_REQUEST,

@@ -52,9 +52,7 @@ class GrantList(LoginRequiredMixin, APIView):
         serializer = self.serializer_class(data=request.data)
 
         if not serializer.is_valid():
-            messages.add_message(
-                request, messages.ERROR, "Nepodarilo sa uložiť analýzu"
-            )
+            messages.add_message(request, messages.ERROR, "Nepodarilo sa uložiť grant")
             return Response(
                 data={
                     "errors": serializer.errors,
