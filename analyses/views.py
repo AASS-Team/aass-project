@@ -82,11 +82,11 @@ class AnalysisList(LoginRequiredMixin, APIView):
             samples = SampleSerializer(
                 Sample.objects.filter(Q(analysis__isnull=True)), many=True
             )
-            lab = LabSerializer(Lab.objects.all(), many=True)
+            lab = LabSerializer(Lab.objects.filter(Q(available=True)), many=True)
             users = UserSerializer(
                 User.objects.filter(~Q(groups__name="používateľ")), many=True
             )
-            tools = ToolSerializer(Tool.objects.all(), many=True)
+            tools = ToolSerializer(Tool.objects.filter(Q(available=True)), many=True)
 
             messages.add_message(
                 request, messages.ERROR, "Nepodarilo sa uložiť analýzu"
