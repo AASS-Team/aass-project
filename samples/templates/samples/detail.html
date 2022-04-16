@@ -16,7 +16,7 @@
             {%  if request.user.id|stringformat:"s" != sample.user.id  %}
 			{% component_block 'ui-label' key="používateľ" center=True %}
 				{% slot content %}
-                    {% if request.user|has_group:'admin' %}
+                    {% if request.user|has_group:'administrátor' %}
 				    <a
 					    class="text-blue-600 hover:underline"
 					    href="{% url 'user-detail' sample.user.id %}"
@@ -36,7 +36,7 @@
             {% if sample.grant|boolean %}
 			{% component_block 'ui-label' key="grant" center=True %}
 				{% slot content %}
-                    {% if request.user|has_group:'admin' %}
+                    {% if request.user|has_group:'administrátor' %}
                         <a
                                 class="text-blue-600 hover:underline"
                                 href="{% url 'grant-detail' sample.grant.id %}"

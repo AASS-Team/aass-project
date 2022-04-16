@@ -20,7 +20,7 @@ class Analysis(models.Model):
         Lab, on_delete=models.RESTRICT, null=True, related_name="analysis"
     )
     status = models.CharField(max_length=12, choices=Status.choices)
-    structure = models.CharField(max_length=255, null=True)
+    structure = models.TextField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     started_at = models.DateTimeField(null=True)
     ended_at = models.DateTimeField(null=True)

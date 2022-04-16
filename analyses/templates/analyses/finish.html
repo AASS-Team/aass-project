@@ -1,0 +1,74 @@
+{% extends 'app.html' %}
+{% load obj_get %}
+
+{% load has_permission %}
+{% load has_group %}
+{% load method_override %}
+{% load map_status %}
+{% load static %}
+{% load replace %}
+
+{% block title %}{{ analysis.name }}{% endblock %}
+
+
+{% block script %}
+    <script src="{% static 'js/ext/jsme.nocache.js' %}"></script>
+    <script defer>
+        // JSApplet for chemical structures
+        setTimeout(function () {
+            window.jsmeApplet = new JSApplet.JSME("jsme", {
+                options: "newlook"
+            });
+            {% obj_get request.POST 'structure' as old_value %}
+            {% firstof old_value analysis.structure as structure %}
+            window.jsmeApplet.readMolFile(`{{ structure|replace:'\\,\\\\'}}`);
+        }, 750);
+
+        // read applet into hidden textarea before submit
+        const sampleForm = document.querySelector('#sampleForm');
+        sampleForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const data = window.jsmeApplet.molFile();
+            document.querySelector('textarea[name="structure"]').value = data;
+            sampleForm.submit();
+        });
+    </script>
+{% endblock %}
+
+
+{% block content %}
+	<div class="bg-white rounded-lg">
+		<div class="p-4 pl-6">
+            <form action="{%  url 'analysis-finish' analysis.id %}" method="POST"  id="sampleForm">
+                {% csrf_token %}
+
+                <h1
+                    class="text-2xl mb-10"
+                >
+                    <span class="text-gray-600">Výsledok analýzy vzorky  </span>
+                    <a
+                        class="text-blue-600 hover:underline ml-1"
+                        href="{% url 'sample-detail' analysis.sample.id %} url }}"
+                    >
+                        {{ analysis.sample.name | truncatewords:5 }}
+                    </a>
+                </h1>
+
+                {#	struktura #}
+                {% component_block 'ui-label' key="štruktúra" additional_classes="h-64 w-full" %}
+                    {% slot content %}
+                        <textarea name="structure" hidden></textarea>
+                        <div class="w-4/6">
+                            <div id="jsme" class="flex w-full h-full justify-center mx-auto"></div>
+                        </div>
+                    {% endslot %}
+                {% endcomponent_block %}
+
+                <div class="flex flex-row justify-end mt-5">
+                        {% csrf_token %}
+                        {% component 'ui-button' additional_classes="rounded-full ml-3" text="Uložiť výsledok" primary=True type="submit" %}
+                </div>
+            </form>
+		</div>
+	</div>
+{% endblock %}

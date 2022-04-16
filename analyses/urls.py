@@ -15,6 +15,16 @@ urlpatterns = [
                 path(
                     "<uuid:id>/edit", views.AnalysisEdit.as_view(), name="analysis-edit"
                 ),
+                path(
+                    "<uuid:id>/start",
+                    views.AnalysisStart.as_view(),
+                    name="analysis-start",
+                ),
+                path(
+                    "<uuid:id>/finish",
+                    views.AnalysisFinish.as_view(),
+                    name="analysis-finish",
+                ),
             ]
         ),
     ),

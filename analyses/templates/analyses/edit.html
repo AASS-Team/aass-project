@@ -1,11 +1,37 @@
 {% extends 'app.html' %}
 
+{% load replace %}
+{% load static %}
 {% load obj_get %}
 {% load method_override %}
 
 {% block title %}Upraviť analýzu {{ analysis.name }}{% endblock %}
 
 {% block script %}
+    {% if analysis.structure %}
+        <script src="{% static 'js/ext/jsme.nocache.js' %}"></script>
+        <script defer>
+            // JSApplet for chemical structures
+            setTimeout(function () {
+                window.jsmeApplet = new JSApplet.JSME("jsme", {
+                    options: "newlook"
+                });
+                {% obj_get request.POST 'structure' as old_value %}
+                {% firstof old_value analysis.structure as structure %}
+                window.jsmeApplet.readMolFile(`{{ structure|replace:'\\,\\\\'}}`);
+            }, 750);
+
+            // read applet into hidden textarea before submit
+            const sampleForm = document.querySelector('#sampleForm');
+            sampleForm.addEventListener("submit", (event) => {
+                event.preventDefault();
+                const data = window.jsmeApplet.molFile();
+                document.querySelector('textarea[name="structure"]').value = data;
+                sampleForm.submit();
+            });
+        </script>
+    {% endif %}
+
     <script defer>
         const selectTemplate = `<div class="flex flex-row relative items-center mb-3">
                                     {% component 'ui-select' name="tools" items=tools additional_classes="text-gray-700 w-full" required=True errors=errors selected=tool.id %}
@@ -29,11 +55,13 @@
 {% block content %}
 	<div class="bg-white rounded-lg">
 		<div class="p-4 pl-6">
-			<form action="{%  url 'analysis-detail' analysis.id %}" method="POST">
+			<form action="{%  url 'analysis-detail' analysis.id %}" method="POST" id="sampleForm">
 				{% csrf_token %}
 				{% method_override 'PUT' %}
 
-				{# vzorka #}
+                <h1 class="text-2xl mb-10">Upraviť analýzu</h1>
+
+                {# vzorka #}
 				{% component_block 'ui-label' key="vzorka" label_for="sample" additional_classes="mt-10" center=True %}
 					{% slot content %}
 						{% component 'ui-select' name="sample" items=samples additional_classes="text-gray-700 w-1/4" required=True errors=errors selected=analysis.sample %}
@@ -71,7 +99,17 @@
                     {% endslot %}
                 {% endcomponent_block %}
 
-				{# TODO struktura #}
+                {#	struktura #}
+                {% if analysis.structure %}
+                    {% component_block 'ui-label' key="štruktúra" additional_classes="h-64 w-full" %}
+                        {% slot content %}
+                            <textarea name="structure" hidden></textarea>
+                            <div class="w-4/6">
+                                <div id="jsme" class="flex w-full h-full justify-center mx-auto"></div>
+                            </div>
+                        {% endslot %}
+                    {% endcomponent_block %}
+                {% endif %}
 
 				<div class="flex flex-row justify-end mt-5">
 					{% component 'ui-button' additional_classes="rounded-full w-24" text="Uložiť" type="submit" primary=True %}

@@ -1,23 +1,40 @@
 {% extends 'app.html' %}
 
+{% load replace %}
+{% load static %}
 {% load has_permission %}
 {% load has_group %}
 {% load method_override %}
 {% load map_status %}
+{% load tz %}
 
-{% block title %}{{ sample.name }}{% endblock %}
+{% block title %}{{ analysis.name }}{% endblock %}
+
+{% block script %}
+    {% if analysis.structure %}
+    <script src="{% static 'js/ext/jsme.nocache.js' %}"></script>
+    <script defer>
+        // JSApplet for chemical structures
+        setTimeout(function () {
+            window.jsmeApplet = new JSApplet.JSME("jsme", {
+                options: "newlook,depict"
+            });
+            window.jsmeApplet.readMolFile(`{{ analysis.structure|replace:'\\,\\\\' }}`);
+        }, 750);
+    </script>
+    {% endif %}
+{% endblock %}
 
 {% block content %}
 	<div class="bg-white rounded-lg">
 		<div class="p-4 pl-6">
-
             <h1
                 class="text-2xl mb-10"
             >
                 <span class="text-gray-600">Analýza vzorky  </span>
                 <a
                     class="text-blue-600 hover:underline ml-1"
-                    href="{% url 'sample-detail' analysis.sample.id %} url }}"
+                    href="{% url 'sample-detail' analysis.sample.id %}"
                 >
                     {{ analysis.sample.name | truncatewords:5 }}
                 </a>
@@ -29,7 +46,7 @@
                     <div class="relative flex items-center">
                         {% component 'status-icon' status=analysis.status style="position:absolute; left:-1em;" %}
                         {{ analysis.status | map_status }}
-                        {% if request.user|has_group:'admin' %}
+                        {% if request.user|has_group:'administrátor' %}
                             (<a
                                     class="text-blue-600 hover:underline"
                                     href="{% url 'user-detail' analysis.laborant.id %}"
@@ -41,10 +58,32 @@
                 {% endslot %}
             {% endcomponent_block %}
 
+            {% if analysis.status == 'IN_PROGRESS' or analysis.status == 'FINISHED' %}
+                {#	začiatok #}
+                {% component_block 'ui-label' key="začiatok" %}
+                    {% slot content %}
+                        <p>
+                            {{ analysis.started_at }}
+                        </p>
+                    {% endslot %}
+                {% endcomponent_block %}
+            {% endif %}
+
+            {% if analysis.status == 'FINISHED' %}
+                {#	koniec #}
+                {% component_block 'ui-label' key="koniec" %}
+                    {% slot content %}
+                        <p>
+                            {{ analysis.ended_at }}
+                        </p>
+                    {% endslot %}
+                {% endcomponent_block %}
+            {% endif %}
+
 			{# lab #}
 			{% component_block 'ui-label' key="laboratórium" center=True %}
                 {% slot content %}
-                    {% if request.user|has_group:'admin' %}
+                    {% if request.user|has_group:'administrátor' %}
                         <a
                             class="text-blue-600 hover:underline"
                             href="{% url 'lab-detail' analysis.lab.id %}"
@@ -83,11 +122,31 @@
 				{% endslot %}
 			{% endcomponent_block %}
 
-			{#	TODO: struktura #}
-            {% if analysis.structure %}
+
+            {% if analysis.status == 'FINISHED' %}
+            {#	struktura #}
+            {% component_block 'ui-label' key="štruktúra" additional_classes="h-64 w-full" %}
+                {% slot content %}
+                    <textarea name="structure" hidden></textarea>
+                    <div class="w-4/6">
+                        <div id="jsme" class="flex w-full h-full justify-center mx-auto"></div>
+                    </div>
+                {% endslot %}
+            {% endcomponent_block %}
             {% endif %}
 
 			<div class="flex flex-row justify-end mt-5">
+                {% if analysis.status == 'PENDING' and request.user|has_permission:'analyses.change_analysis' %}
+                    <form action="{% url 'analysis-start' analysis.id %}" method="POST">
+                        {% csrf_token %}
+				        {% component 'ui-button' additional_classes="rounded-full ml-3" text="Začať analýzu" primary=True type="submit" %}
+                    </form>
+                {% endif %}
+
+                {% if analysis.status == 'IN_PROGRESS' and request.user|has_permission:'analyses.change_analysis' %}
+                    {% url 'analysis-finish' analysis.id as analysis_finish_url %}
+				    {% component 'ui-button' additional_classes="rounded-full ml-3" text="Dokončiť analýzu" primary=True type="link" href=analysis_finish_url %}
+                {% endif %}
 
                 {% if request.user|has_permission:'analyses.change_analysis' %}
                 {% url 'analysis-edit' analysis.id as analysis_edit_url %}

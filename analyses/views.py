@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
@@ -91,6 +93,7 @@ class AnalysisList(LoginRequiredMixin, APIView):
             )
             return Response(
                 data={
+                    "analysis": serializer.data,
                     "samples": samples.data,
                     "labs": lab.data,
                     "laborants": users.data,
@@ -213,32 +216,33 @@ class AnalysisDetail(LoginRequiredMixin, APIView):
                 template_name="analyses/edit.html",
             )
 
-        # update tool availability
-        old_tools = list(analysis.tools.all())
-        new_tools = serializer.validated_data.get("tools")
+        if analysis.status != Analysis.Status.FINISHED:
+            # update tool availability
+            old_tools = list(analysis.tools.all())
+            new_tools = serializer.validated_data.get("tools")
 
-        removed_tools = frozenset(old_tools).difference(new_tools)
-        for tool in removed_tools:  # Removed tools
-            tool.available = True
+            removed_tools = frozenset(old_tools).difference(new_tools)
+            for tool in removed_tools:  # Removed tools
+                tool.available = True
 
-        added_tools = frozenset(new_tools).difference(old_tools)
-        for tool in added_tools:
-            tool.available = False
+            added_tools = frozenset(new_tools).difference(old_tools)
+            for tool in added_tools:
+                tool.available = False
 
-        changed_tools = [*removed_tools, *added_tools]
-        if len(changed_tools) > 0:
-            Tool.objects.bulk_update(changed_tools, ["available"])
+            changed_tools = [*removed_tools, *added_tools]
+            if len(changed_tools) > 0:
+                Tool.objects.bulk_update(changed_tools, ["available"])
 
-        # update lab availability
-        old_lab = analysis.lab
-        new_lab = serializer.validated_data.get("lab")
+            # update lab availability
+            old_lab = analysis.lab
+            new_lab = serializer.validated_data.get("lab")
 
-        if old_lab is not new_lab:
-            old_lab.available, new_lab.available = (
-                new_lab.available,
-                old_lab.available,
-            )  # swap availability
-            Lab.objects.bulk_update([old_lab, new_lab], ["available"])
+            if old_lab is not new_lab:
+                old_lab.available, new_lab.available = (
+                    new_lab.available,
+                    old_lab.available,
+                )  # swap availability
+                Lab.objects.bulk_update([old_lab, new_lab], ["available"])
 
         serializer.save()
         messages.add_message(request, messages.SUCCESS, "Analýza uložená")
@@ -291,6 +295,7 @@ class AnalysisEdit(LoginRequiredMixin, APIView):
     def get(self, request, id, format=None):
         analysis = self.get_object(id)
         serializer = AnalysisSerializer(analysis)
+
         labs = LabSerializer(Lab.objects.all(), many=True)
         samples = SampleSerializer(
             Sample.objects.filter(Q(analysis__isnull=True) | Q(id=analysis.sample.id)),
@@ -311,3 +316,101 @@ class AnalysisEdit(LoginRequiredMixin, APIView):
             },
             template_name="analyses/edit.html",
         )
+
+
+class AnalysisStart(LoginRequiredMixin, APIView):
+    """
+    Analysis start
+    """
+
+    renderer_classes = [TemplateHTMLRenderer]
+
+    def get_object(self, id):
+        try:
+            return Analysis.objects.get(pk=id)
+        except Analysis.DoesNotExist:
+            raise NotFound()
+
+    @method_decorator(
+        permission_required("analyses.change_analysis", raise_exception=True)
+    )
+    def post(self, request, id, format=None):
+        analysis = self.get_object(id)
+        serializer = AnalysisSerializer(analysis, data=request.data, partial=True)
+
+        if not serializer.is_valid():
+            messages.add_message(
+                request, messages.ERROR, "Nepodarilo sa aktualizovať stav analýzy."
+            )
+            return redirect("analysis-detail", analysis.id)
+
+        serializer.save(status=Analysis.Status.IN_PROGRESS, started_at=datetime.now())
+        messages.add_message(
+            request, messages.SUCCESS, "Stav analýzy bol aktualizovaný."
+        )
+        return redirect("analysis-detail", analysis.id)
+
+
+class AnalysisFinish(LoginRequiredMixin, APIView):
+    """
+    Analysis finish
+    """
+
+    renderer_classes = [TemplateHTMLRenderer]
+
+    def get_object(self, id):
+        try:
+            return Analysis.objects.get(pk=id)
+        except Analysis.DoesNotExist:
+            raise NotFound()
+
+    @method_decorator(
+        permission_required("analyses.change_analysis", raise_exception=True)
+    )
+    def get(self, request, id, format=None):
+        analysis = self.get_object(id)
+        serializer = AnalysisSerializer(analysis)
+
+        return Response(
+            data={
+                "analysis": serializer.data,
+            },
+            template_name="analyses/finish.html",
+        )
+
+    @method_decorator(
+        permission_required("analyses.change_analysis", raise_exception=True)
+    )
+    def post(self, request, id, format=None):
+        analysis = self.get_object(id)
+        serializer = AnalysisSerializer(analysis, data=request.data, partial=True)
+
+        if not serializer.is_valid():
+            messages.add_message(
+                request, messages.ERROR, "Nepodarilo sa aktualizovať stav analýzy."
+            )
+            return Response(
+                data={
+                    "analysis": AnalysisSerializer(analysis).data,
+                    "errors": serializer.errors,
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+                template_name="analyses/finish.html",
+            )
+
+        # set tools as available
+        tools = list(analysis.tools.all())
+        for tool in tools:
+            tool.available = True
+            Tool.objects.bulk_update(tools, ["available"])
+
+        # set lab as available
+        lab = analysis.lab
+        lab.available = True
+        lab.save()
+
+        serializer.save(status=Analysis.Status.FINISHED, ended_at=datetime.now())
+        messages.add_message(
+            request, messages.SUCCESS, "Stav analýzy bol aktualizovaný."
+        )
+        return redirect("analysis-detail", analysis.id)
