@@ -82,11 +82,11 @@ class AnalysisList(LoginRequiredMixin, APIView):
             samples = SampleSerializer(
                 Sample.objects.filter(Q(analysis__isnull=True)), many=True
             )
-            lab = LabSerializer(Lab.objects.all(), many=True)
+            lab = LabSerializer(Lab.objects.filter(Q(available=True)), many=True)
             users = UserSerializer(
                 User.objects.filter(~Q(groups__name="používateľ")), many=True
             )
-            tools = ToolSerializer(Tool.objects.all(), many=True)
+            tools = ToolSerializer(Tool.objects.filter(Q(available=True)), many=True)
 
             messages.add_message(
                 request, messages.ERROR, "Nepodarilo sa uložiť analýzu"
@@ -132,14 +132,14 @@ class AnalysisCreate(LoginRequiredMixin, APIView):
         permission_required("analyses.add_analysis", raise_exception=True)
     )
     def get(self, request, format=None):
-        labs = LabSerializer(Lab.objects.all(), many=True)
         samples = SampleSerializer(
             Sample.objects.filter(analysis__isnull=True), many=True
         )
         users = UserSerializer(
             User.objects.filter(~Q(groups__name="používateľ")), many=True
         )
-        tools = ToolSerializer(Tool.objects.all(), many=True)
+        labs = LabSerializer(Lab.objects.filter(available=True), many=True)
+        tools = ToolSerializer(Tool.objects.filter(available=True), many=True)
 
         return Response(
             data={
@@ -192,7 +192,9 @@ class AnalysisDetail(LoginRequiredMixin, APIView):
         serializer = AnalysisSerializer(analysis, data=request.data)
 
         if not serializer.is_valid():
-            labs = LabSerializer(Lab.objects.all(), many=True)
+            labs = LabSerializer(
+                Lab.objects.filter(Q(available=True) | Q(id=analysis.lab.id)), many=True
+            )
             samples = SampleSerializer(
                 Sample.objects.filter(
                     Q(analysis__isnull=True) | Q(id=analysis.sample.id)
@@ -202,8 +204,9 @@ class AnalysisDetail(LoginRequiredMixin, APIView):
             users = UserSerializer(
                 User.objects.filter(~Q(groups__name="používateľ")), many=True
             )
-            tools = ToolSerializer(Tool.objects.all(), many=True)
-
+            tools = ToolSerializer(
+                Tool.objects.filter(Q(available=True) | Q(analysis=analysis)), many=True
+            )
             messages.add_message(request, messages.ERROR, "Nepodarilo sa uložiť vzorku")
             return Response(
                 data={
@@ -296,7 +299,9 @@ class AnalysisEdit(LoginRequiredMixin, APIView):
         analysis = self.get_object(id)
         serializer = AnalysisSerializer(analysis)
 
-        labs = LabSerializer(Lab.objects.all(), many=True)
+        labs = LabSerializer(
+            Lab.objects.filter(Q(available=True) | Q(id=analysis.lab.id)), many=True
+        )
         samples = SampleSerializer(
             Sample.objects.filter(Q(analysis__isnull=True) | Q(id=analysis.sample.id)),
             many=True,
@@ -304,8 +309,9 @@ class AnalysisEdit(LoginRequiredMixin, APIView):
         users = UserSerializer(
             User.objects.filter(~Q(groups__name="používateľ")), many=True
         )
-        tools = ToolSerializer(Tool.objects.all(), many=True)
-
+        tools = ToolSerializer(
+            Tool.objects.filter(Q(available=True) | Q(analysis=analysis)), many=True
+        )
         return Response(
             data={
                 "analysis": serializer.data,
